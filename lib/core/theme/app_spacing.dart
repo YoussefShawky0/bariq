@@ -7,4 +7,6 @@ abstract final class AppSpacing {
   static double get regular => 16.h;
   static double get section => 24.h;
   static double get spacious => 32.h;
+  static double get onboardingControlsHorizontal => 18.w;
+  static double get onboardingControlsVertical => 14.h;
 }

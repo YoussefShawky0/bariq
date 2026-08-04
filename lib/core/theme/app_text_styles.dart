@@ -27,4 +27,42 @@ abstract final class AppTextStyles {
     fontSize: 16.sp,
     fontWeight: FontWeight.w700,
   );
+
+  static TextStyle get onboardingHeadline => TextStyle(
+    color: AppColors.navy,
+    fontSize: 26.sp,
+    fontWeight: FontWeight.w800,
+    height: 1.35,
+  );
+
+  static TextStyle get onboardingBody => TextStyle(
+    color: AppColors.textMuted,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+    height: 1.75,
+  );
+
+  static TextStyle get onboardingEyebrow => TextStyle(
+    color: AppColors.aqua,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle get onboardingButton => TextStyle(
+    color: AppColors.surface,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle get onboardingSkip => TextStyle(
+    color: AppColors.textMuted,
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w600,
+  );
+
+  static TextStyle get errorCaption => TextStyle(
+    color: AppColors.error,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w600,
+  );
 }
