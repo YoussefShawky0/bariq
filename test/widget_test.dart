@@ -2,11 +2,11 @@ import 'package:bariq/core/constants/app_strings.dart';
 import 'package:bariq/core/errors/failures.dart';
 import 'package:bariq/core/theme/app_sizes.dart';
 import 'package:bariq/core/theme/app_theme.dart';
-import 'package:bariq/features/bootstrap/domain/entities/app_destination.dart';
-import 'package:bariq/features/bootstrap/domain/repositories/bootstrap_repository.dart';
-import 'package:bariq/features/bootstrap/domain/usecases/resolve_initial_destination.dart';
-import 'package:bariq/features/bootstrap/presentation/cubit/bootstrap_cubit.dart';
-import 'package:bariq/features/bootstrap/presentation/pages/bootstrap_page.dart';
+import 'package:bariq/features/app_startup/domain/entities/app_destination.dart';
+import 'package:bariq/features/app_startup/domain/repositories/app_startup_repository.dart';
+import 'package:bariq/features/app_startup/domain/usecases/resolve_initial_destination.dart';
+import 'package:bariq/features/app_startup/presentation/cubit/app_startup_cubit.dart';
+import 'package:bariq/features/app_startup/presentation/pages/app_startup_page.dart';
 import 'package:bariq/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:bariq/features/onboarding/domain/usecases/complete_onboarding.dart';
 import 'package:bariq/features/onboarding/presentation/cubit/onboarding_cubit.dart';
@@ -17,26 +17,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockBootstrapRepository extends Mock implements BootstrapRepository {}
+class MockAppStartupRepository extends Mock implements AppStartupRepository {}
 
 class MockOnboardingRepository extends Mock implements OnboardingRepository {}
 
 void main() {
-  late MockBootstrapRepository repository;
+  late MockAppStartupRepository repository;
   late MockOnboardingRepository onboardingRepository;
-  late BootstrapCubit cubit;
+  late AppStartupCubit cubit;
 
   setUp(() {
-    repository = MockBootstrapRepository();
+    repository = MockAppStartupRepository();
     onboardingRepository = MockOnboardingRepository();
-    cubit = BootstrapCubit(ResolveInitialDestination(repository));
+    cubit = AppStartupCubit(ResolveInitialDestination(repository));
   });
 
   tearDown(() async {
     await cubit.close();
   });
 
-  testWidgets('renders the resolved bootstrap destination', (tester) async {
+  testWidgets('renders the resolved app startup destination', (tester) async {
     when(
       repository.resolveInitialDestination,
     ).thenAnswer((_) async => const Right(AppDestination.onboarding));
@@ -56,7 +56,7 @@ void main() {
     expect(find.text(AppStrings.skip), findsOneWidget);
   });
 
-  testWidgets('renders a retry action when bootstrap fails', (tester) async {
+  testWidgets('renders a retry action when app startup fails', (tester) async {
     when(
       repository.resolveInitialDestination,
     ).thenAnswer((_) async => const Left(CacheFailure()));
@@ -79,7 +79,7 @@ void main() {
 class _TestApp extends StatelessWidget {
   const _TestApp({required this.cubit, required this.onboardingCubitFactory});
 
-  final BootstrapCubit cubit;
+  final AppStartupCubit cubit;
   final OnboardingCubit Function() onboardingCubitFactory;
 
   @override
@@ -93,7 +93,7 @@ class _TestApp extends StatelessWidget {
           home: BlocProvider.value(value: cubit, child: child),
         );
       },
-      child: BootstrapPage(onboardingCubitFactory: onboardingCubitFactory),
+      child: AppStartupPage(onboardingCubitFactory: onboardingCubitFactory),
     );
   }
 }

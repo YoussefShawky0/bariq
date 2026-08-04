@@ -1,6 +1,6 @@
 # BARIQ — Product & Engineering Master Plan
 
-> الإصدار: 1.0  
+> الإصدار: 1.1
 > الحالة: Architecture Baseline  
 > اللغة الأساسية للواجهة: العربية RTL  
 > Figma mobile baseline: `390×844`  
@@ -27,16 +27,16 @@ BARIQ منصة تشغيل لخدمات غسيل وتلميع السيارات ف
 | Mobile architecture | Clean Architecture + Feature-First | عزل الـbusiness rules وقابلية الاختبار |
 | State management | BLoC/Cubit + Freezed | state machines صريحة وقابلة للاختبار |
 | Functional errors | `fpdart.Either<Failure, T>` | مسار نجاح/فشل typed دون exceptions عبر الطبقات |
-| Backend | NestJS Modular Monolith | أسرع لفريق صغير مع حدود modules قابلة للفصل لاحقًا |
-| Database | PostgreSQL + PostGIS | معاملات قوية واستعلامات نطاقات ومواقع |
-| ORM | TypeORM | دعم مباشر لـPostgres geometry/geography |
-| Jobs/locks/cache | Redis + BullMQ | dispatch offers، retries، webhooks، notifications |
-| Realtime | Socket.IO gateway | تحديثات مؤقتة لحالة الطلب وموقع الفني |
-| Files | S3-compatible object storage | before/after evidence بروابط موقعة |
-| Push | Firebase Cloud Messaging | إشعارات العميل والفني |
+| Backend | Supabase managed backend | أقل عبء تشغيل لمطور Flutter واحد مع Auth وData API وStorage وRealtime |
+| Database | Supabase PostgreSQL + PostGIS | معاملات قوية واستعلامات نطاقات ومواقع |
+| Data access | Supabase Flutter SDK + SQL/RPC | وصول typed من الـData layer وعمليات حساسة داخل Postgres/Edge Functions |
+| Jobs | Supabase Cron/Queues عند حاجة مثبتة | retries وwebhooks والمهام المؤجلة بدون خادم دائم |
+| Realtime | Supabase Realtime | تحديثات حالة الطلب وموقع الفني وفق RLS وسياسة بث محددة |
+| Files | Supabase Storage | before/after evidence بسياسات Storage وروابط موقعة |
+| Push | Firebase Cloud Messaging عبر Edge Functions | FCM مزود إشعارات فقط وليس backend ثانيًا |
 | Payment MVP | Cash + Paymob | مساران واضحان دون توسع بوابات |
-| ETA | Google Routes API من السيرفر | route ETA لا straight-line distance |
-| Integration reliability | Transactional Outbox | منع ضياع events بين DB والخدمات الخارجية |
+| ETA | Google Routes API من Edge Functions | route ETA لا straight-line distance ولا كشف مفاتيح في التطبيق |
+| Integration reliability | Postgres transactions + idempotency | منع التكرار وحفظ صحة transitions والمدفوعات |
 
 ## 3. حدود الـMVP
 
@@ -75,7 +75,7 @@ BARIQ منصة تشغيل لخدمات غسيل وتلميع السيارات ف
 
 | المجموعة | الشاشات | النتيجة |
 |---|---|---|
-| Bootstrap | Native splash، app bootstrap، maintenance، force update | دخول آمن للحالة الصحيحة |
+| App Startup | Native splash، app app startup، maintenance، force update | دخول آمن للحالة الصحيحة |
 | Onboarding | 3 شرائح قيمة المنتج، language، permissions context | فهم الخدمة قبل طلب الصلاحيات |
 | Auth | Phone، OTP، resend timer، profile setup | هوية موثقة |
 | Home | greeting، saved location، services، active booking، recent vehicles | نقطة بداية واضحة |
@@ -123,7 +123,7 @@ BARIQ منصة تشغيل لخدمات غسيل وتلميع السيارات ف
 
 ```mermaid
 flowchart LR
-    A["Splash / Bootstrap"] --> B{"Authenticated?"}
+    A["Splash / App Startup"] --> B{"Authenticated?"}
     B -- "No" --> C["Onboarding"]
     C --> D["Phone + OTP"]
     D --> E["Profile setup"]
@@ -159,52 +159,54 @@ flowchart TB
     Customer["Customer Flutter App"]
     Technician["Technician Flutter App"]
     Ops["Ops Web Dashboard"]
-    API["BARIQ API<br/>NestJS Modular Monolith"]
-    Worker["BARIQ Worker<br/>same codebase"]
-    DB[("PostgreSQL + PostGIS")]
-    Redis[("Redis")]
-    Storage[("S3-compatible Storage")]
+    Auth["Supabase Auth"]
+    Data["Supabase Data API / RPC"]
+    Realtime["Supabase Realtime"]
+    Functions["Supabase Edge Functions"]
+    DB[("Supabase PostgreSQL + PostGIS")]
+    Storage["Supabase Storage"]
     Paymob["Paymob"]
     FCM["Firebase Cloud Messaging"]
     Routes["Google Routes API"]
 
-    Customer -->|HTTPS / Socket.IO| API
-    Technician -->|HTTPS / Socket.IO| API
-    Ops -->|HTTPS / Socket.IO| API
-    API --> DB
-    API --> Redis
-    Worker --> DB
-    Worker --> Redis
-    API --> Storage
-    Worker --> Paymob
-    Worker --> FCM
-    Worker --> Routes
+    Customer --> Auth
+    Technician --> Auth
+    Ops --> Auth
+    Customer -->|Supabase Flutter SDK| Data
+    Technician -->|Supabase Flutter SDK| Data
+    Ops --> Data
+    Customer --> Realtime
+    Technician --> Realtime
+    Data --> DB
+    Realtime --> DB
+    Customer --> Storage
+    Technician --> Storage
+    Data --> Functions
+    Functions --> DB
+    Functions --> Paymob
+    Functions --> FCM
+    Functions --> Routes
 ```
 
 ## 7. Deployment Topology
 
 ```mermaid
 flowchart LR
-    Internet["Mobile/Web Clients"] --> LB["TLS / Load Balancer"]
-    LB --> API1["API Instance"]
-    LB --> API2["API Instance"]
-    API1 --> PG[("Managed PostgreSQL")]
-    API2 --> PG
-    API1 --> R[("Managed Redis")]
-    API2 --> R
-    Worker["Worker Instance"] --> PG
-    Worker --> R
-    API1 --> OBJ[("Object Storage")]
-    API2 --> OBJ
-    Worker --> External["Paymob / FCM / Routes"]
-    Obs["Logs + Metrics + Traces"] -.-> API1
-    Obs -.-> API2
-    Obs -.-> Worker
+    Internet["Flutter / Web Clients"] --> Platform["Supabase Managed Platform"]
+    Platform --> Auth["Auth"]
+    Platform --> API["Data API / Realtime"]
+    Platform --> Functions["Edge Functions"]
+    Platform --> Storage["Storage"]
+    Auth --> PG[("PostgreSQL + PostGIS")]
+    API --> PG
+    Functions --> PG
+    Functions --> External["Paymob / FCM / Routes"]
+    Logs["Supabase Logs + Advisors"] -.-> Platform
 ```
 
-مبدئيًا يمكن تشغيل API instance واحدة وWorker واحدة. التكرار في الرسم يوضح مسار التوسع الأفقي، وليس مطلب إطلاق.
+لا توجد API أوWorker servers يديرها مطور التطبيق في الـMVP. أي منطق يحتاج secret أوصلاحية مرتفعة يوضع في Edge Function أوعملية SQL/RPC محمية، ولا ينفذ داخل Flutter.
 
-## 8. Backend Modular Monolith
+## 8. Supabase Backend Boundaries
 
 ### 8.1 Modules
 
@@ -248,43 +250,27 @@ flowchart TB
 ### 8.2 Backend Folder Pattern
 
 ```text
-apps/
-├── api/
-└── worker/
-src/
-├── shared/
-│   ├── auth/
-│   ├── database/
-│   ├── errors/
-│   ├── idempotency/
-│   ├── observability/
-│   └── outbox/
-└── modules/
-    └── booking/
-        ├── domain/
-        │   ├── entities/
-        │   ├── value-objects/
-        │   ├── events/
-        │   └── repositories/
-        ├── application/
-        │   ├── commands/
-        │   ├── queries/
-        │   └── ports/
-        ├── infrastructure/
-        │   ├── persistence/
-        │   ├── integrations/
-        │   └── jobs/
-        └── presentation/
-            ├── http/
-            └── websocket/
+supabase/
+├── config.toml
+├── migrations/
+├── functions/
+│   ├── _shared/
+│   ├── create-payment/
+│   ├── paymob-webhook/
+│   ├── dispatch-booking/
+│   └── send-notification/
+├── seed.sql
+└── tests/
+    └── database/
 ```
 
 قواعد الحدود:
 
-- Module لا يصل إلى tables تخص Module آخر مباشرة.
-- التواصل المتزامن عبر application interfaces.
-- side effects غير المتزامنة عبر domain events + outbox.
-- لا نشارك entities بين modules؛ نشارك IDs وcontracts فقط.
+- كل جدول في schema مكشوف يفعّل عليه RLS وتكتب له policies حسب الملكية والدور.
+- Flutter يستخدم publishable key فقط؛ `service_role` وأسرار الدفع لا تدخل التطبيق أوGit.
+- عمليات status transitions والمدفوعات والتعيين تنفذ داخل SQL/RPC أوEdge Functions، وليس writes حرة من العميل.
+- migrations هي المصدر الوحيد لتاريخ schema، وتراجع بـDatabase Advisors واختبارات RLS.
+- لا نضيف Cron أوQueues أوFunctions قبل وجود flow يحتاجها فعليًا.
 
 ## 9. Mobile Architecture
 
@@ -296,7 +282,7 @@ flowchart LR
     Impl["Data Repository Implementation"] -. implements .-> Contract
     Impl --> Remote["Remote Data Source"]
     Impl --> Local["Local Data Source"]
-    Remote --> API["BARIQ API"]
+    Remote --> API["Supabase SDK / Edge Functions"]
     Local --> Cache["Secure/Local Cache"]
 ```
 
@@ -313,18 +299,18 @@ bariq/
 │   ├── bariq_core/
 │   ├── bariq_api_client/
 │   └── bariq_lints/
-├── backend/
+├── supabase/
 ├── docs/
 └── tooling/
 ```
 
-لأن المشروع الحالي بدأ كتطبيق Flutter واحد، النقل إلى monorepo يتم في مرحلة مستقلة بعد تثبيت splash/bootstrap، وليس rewrite متزامنًا مع أول feature.
+لأن المشروع الحالي بدأ كتطبيق Flutter واحد، النقل إلى monorepo يتم في مرحلة مستقلة بعد تثبيت splash/app startup، وليس rewrite متزامنًا مع أول feature.
 
 ### 9.2 Customer Features
 
 ```text
 features/
-├── bootstrap/
+├── app_startup/
 ├── onboarding/
 ├── auth/
 ├── home/
@@ -558,30 +544,30 @@ stateDiagram-v2
 sequenceDiagram
     actor C as Customer
     participant App as Customer App
-    participant API as Booking API
+    participant Backend as Booking RPC / Edge Function
     participant Av as Availability
-    participant DB as PostgreSQL
-    participant Pay as Payments
-    participant Q as Outbox/Worker
+    participant DB as Supabase PostgreSQL
+    participant Pay as Paymob
+    participant Notify as Notification Function
 
     C->>App: completes booking draft
-    App->>API: POST /bookings + Idempotency-Key
-    API->>Av: reserve capacity
+    App->>Backend: create booking + idempotency key
+    Backend->>Av: reserve capacity
     Av->>DB: lock slot capacity
     DB-->>Av: reserved
-    API->>DB: create booking + items snapshot
+    Backend->>DB: create booking + items snapshot
     alt Cash
-        API->>DB: status = CONFIRMED
-        API-->>App: confirmed booking
+        Backend->>DB: status = CONFIRMED
+        Backend-->>App: confirmed booking
     else Paymob
-        API->>Pay: create payment intention
-        Pay-->>API: client secret/reference
-        API->>DB: payment attempt = PENDING
-        API-->>App: pending payment data
+        Backend->>Pay: create payment intention
+        Pay-->>Backend: client secret/reference
+        Backend->>DB: payment attempt = PENDING
+        Backend-->>App: pending payment data
     end
-    API->>DB: append outbox event
-    Q->>DB: consume outbox
-    Q-->>App: push/deep-link notification later
+    Backend->>DB: commit transaction
+    Backend->>Notify: enqueue notification intent
+    Notify-->>App: push/deep-link notification later
 ```
 
 ## 14. Payment Flow
@@ -590,24 +576,24 @@ sequenceDiagram
 sequenceDiagram
     actor C as Customer
     participant App as Flutter App
-    participant API as BARIQ API
+    participant Function as Payment Edge Function
     participant P as Paymob
-    participant DB as PostgreSQL
-    participant W as Worker
+    participant DB as Supabase PostgreSQL
+    participant Notify as Notification Function
 
-    App->>API: create payment attempt
-    API->>P: create intention server-side
-    P-->>API: intention/client secret
-    API-->>App: payment session
+    App->>Function: create payment attempt
+    Function->>P: create intention using server secret
+    P-->>Function: intention/client secret
+    Function-->>App: payment session
     C->>P: completes payment UI
     P-->>App: redirect result (informational)
-    App->>API: GET payment status
-    P->>API: transaction webhook + HMAC
-    API->>API: verify HMAC + amount + reference
-    API->>DB: idempotently mark SUCCESS
-    API->>DB: confirm booking + outbox event
-    W->>DB: publish notification event
-    API-->>App: authoritative status
+    App->>DB: read payment status under RLS
+    P->>Function: transaction webhook + HMAC
+    Function->>Function: verify HMAC + amount + reference
+    Function->>DB: idempotently mark SUCCESS
+    Function->>DB: confirm booking transactionally
+    Function->>Notify: send confirmation event
+    DB-->>App: Realtime / authoritative status
 ```
 
 قواعد:
@@ -642,23 +628,23 @@ score =
 
 ```mermaid
 sequenceDiagram
-    participant D as Dispatch Worker
-    participant DB as PostgreSQL
-    participant R as Redis/BullMQ
+    participant D as Dispatch Edge Function
+    participant DB as Supabase PostgreSQL
+    participant Q as Supabase Queue / Cron
     participant T as Technician App
     participant O as Ops Dashboard
 
     D->>DB: query eligible candidates
     D->>D: calculate scores
     D->>DB: create offer with expiry
-    D->>R: enqueue timeout
-    D-->>T: push/socket offer
+    D->>Q: enqueue offer timeout
+    D-->>T: push/realtime offer
     alt Technician accepts first
         T->>D: accept offer
         D->>DB: transaction + booking lock
         DB-->>D: assignment committed
     else Rejected/expired
-        R->>D: timeout job
+        Q->>D: timeout job
         D->>DB: close offer and try next
     else No candidates
         D->>DB: status = OPS_REVIEW
@@ -748,8 +734,8 @@ flowchart TB
 | Bloc/Cubit unit | كل event transition بما فيها retry/cancel |
 | Repository | DTO↔Entity، status codes↔Failure، cache strategy |
 | Widget | auth، booking steps، active timeline، error/empty/offline، RTL |
-| Backend integration | transaction locks، idempotency، PostGIS queries، outbox |
-| Contract | OpenAPI/API client compatibility |
+| Supabase integration | transaction locks، idempotency، PostGIS، RLS، Storage policies |
+| Contract | migrations، RPC signatures، Edge Function payloads |
 | E2E | happy path cash، Paymob webhook، dispatch timeout، complaint |
 | Performance | slot search، dispatch query، active socket connections |
 
@@ -757,10 +743,10 @@ flowchart TB
 
 ## 21. Observability
 
-- Structured JSON logs مع `traceId`, `userId` masked، `bookingId`.
-- Metrics: API latency/error rate، queue depth/age، webhook failures، dispatch time، completion SLA، socket connections.
-- Tracing عبر API → DB/Redis → worker → provider.
-- Alerts: payment webhook backlog، outbox stuck، dispatch OPS_REVIEW spike، DB saturation، elevated OTP failures.
+- Structured logs داخل Edge Functions مع `traceId`, `userId` masked، `bookingId`.
+- Metrics: function latency/error rate، queue depth/age، webhook failures، dispatch time، completion SLA، Realtime connections.
+- تتبع flow عبر Edge Function → PostgreSQL → provider مع correlation IDs.
+- Alerts: payment webhook failures، queue backlog، dispatch OPS_REVIEW spike، DB saturation، elevated OTP failures.
 - Business dashboard: conversion، slot utilization، acceptance، on-time arrival، completion، cancellation، rating، repeat rate.
 
 ## 22. Git and Delivery Flow
@@ -771,12 +757,12 @@ gitGraph
     branch develop
     checkout develop
     commit id: "integration baseline"
-    branch feature/bootstrap-foundation
-    checkout feature/bootstrap-foundation
+    branch feature/app-startup-foundation
+    checkout feature/app-startup-foundation
     commit id: "feat: add design tokens"
-    commit id: "test: cover bootstrap"
+    commit id: "test: cover app startup"
     checkout develop
-    merge feature/bootstrap-foundation id: "PR reviewed"
+    merge feature/app-startup-foundation id: "PR reviewed"
     branch feature/auth
     checkout feature/auth
     commit id: "feat: add otp flow"
@@ -807,13 +793,13 @@ Branch: `chore/foundation-hard-rules`
 - إضافة `fpdart`, `logger`, `flutter_dotenv`.
 - تصحيح dependency placement حسب الاستخدام.
 - إزالة raw colors/spacing/asset paths من الشاشات الحالية.
-- bootstrap Cubit/Bloc بـFreezed.
+- app startup Cubit/Bloc بـFreezed.
 - تحديث splash tests وwidget tests.
 - تهيئة lints/codegen/scripts.
 
 ### Phase 1 — Identity & Profile
 
-- onboarding، phone/OTP، session bootstrap.
+- onboarding، phone/OTP، session app startup.
 - profile setup/edit.
 - secure token storage.
 - tests وAPI contracts.
@@ -918,16 +904,17 @@ Definition of Done موجود في `docs/ENGINEERING-CONSTRAINTS.md` وهو إل
 |---|---|
 | State | `flutter_bloc`, `bloc`, `freezed_annotation`, `freezed`, `build_runner` |
 | Functional errors | `fpdart` |
-| Networking | `dio`, `connectivity_plus` |
+| Backend SDK | `supabase_flutter` |
+| External networking | `dio` فقط عندما لا يغطي Supabase التكامل |
 | Routing | `go_router` |
 | Dependency injection | `get_it`, `injectable`, `injectable_generator` |
 | JSON | `json_annotation`, `json_serializable` |
 | Responsive | `flutter_screenutil` |
 | Config/secrets | `flutter_dotenv` |
 | Logging | `logger` |
-| Secure session | `flutter_secure_storage` |
+| Secure session | Supabase Auth persistence؛ لا نخزن access tokens يدويًا |
 | Local cache | `shared_preferences` للخفيف؛ قاعدة محلية فقط عند حاجة مثبتة |
-| Firebase | `firebase_core`, `firebase_messaging` |
+| Push only | `firebase_core`, `firebase_messaging` عند تنفيذ notifications |
 | Location/maps | `geolocator`, `google_maps_flutter` |
 | Media | `image_picker` مع upload abstraction |
 | Localization | `easy_localization` أوحل موحد واحد فقط |
@@ -938,13 +925,12 @@ Definition of Done موجود في `docs/ENGINEERING-CONSTRAINTS.md` وهو إل
 
 ## 29. References
 
-- NestJS Modules: <https://docs.nestjs.com/modules>
-- NestJS Queues: <https://docs.nestjs.com/techniques/queues>
-- NestJS WebSocket Gateways: <https://docs.nestjs.com/websockets/gateways>
-- TypeORM PostgreSQL spatial columns: <https://typeorm.io/docs/drivers/postgres/>
-- Prisma SafeQL/PostGIS limitation: <https://docs.prisma.io/docs/orm/prisma-client/using-raw-sql/safeql>
+- Supabase Flutter quickstart: <https://supabase.com/docs/guides/getting-started/quickstarts/flutter>
+- Supabase phone login: <https://supabase.com/docs/guides/auth/phone-login>
+- Supabase Row Level Security: <https://supabase.com/docs/guides/database/postgres/row-level-security>
+- Supabase Edge Functions: <https://supabase.com/docs/guides/functions>
+- Supabase securing the Data API: <https://supabase.com/docs/guides/api/securing-your-api>
 - Paymob API integration paths: <https://developers.paymob.com/paymob-docs/integration-paths/apis>
 - Paymob callbacks and HMAC: <https://developers.paymob.com/paymob-docs/developers/webhook-callbacks-and-hmac>
 - Firebase Cloud Messaging for Flutter: <https://firebase.google.com/docs/cloud-messaging/flutter/receive-messages>
 - Google Routes Compute Routes: <https://developers.google.com/maps/documentation/routes/compute-route-over>
-

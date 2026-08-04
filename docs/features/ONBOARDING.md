@@ -19,7 +19,7 @@ trust model so that I understand the service before signing in.
 1. A customer who has not completed onboarding sees the Convenience screen.
 2. Selecting "التالي" moves through Expertise, then Tracking.
 3. Selecting "تخطي" or "ابدأ الآن" persists onboarding completion locally.
-4. After successful persistence, bootstrap resolves the next destination as
+4. After successful persistence, app startup resolves the next destination as
    sign-in.
 5. A storage failure keeps the customer in onboarding and exposes a localized
    retry action.
@@ -40,7 +40,7 @@ stateDiagram-v2
     Saving --> Completed: local write succeeds
     Saving --> Failure: local write fails
     Failure --> Saving: retry
-    Completed --> SignIn: bootstrap refresh
+    Completed --> SignIn: app startup refresh
 ```
 
 ## Architecture
@@ -59,7 +59,7 @@ OnboardingPage -> OnboardingCubit -> CompleteOnboarding
 - Cubit: page transition, successful completion, failed completion, retry.
 - Widget: renders Convenience, moves through Expertise and Tracking,
   completes/skips, and renders failure.
-- Regression: bootstrap tests continue to pass.
+- Regression: app startup tests continue to pass.
 
 ## Out of Scope
 
