@@ -28,8 +28,14 @@ remain deterministic without production credentials.
   data is collected.
 - Keep Email/Password enabled and use the default confirmation/reset email
   templates while the project remains on the free plan.
-- Configure Google OAuth for the Android application and add every required
-  development/production redirect URI before enabling the Google button.
+- Create a Google OAuth **Web application** client. In Google Cloud, add
+  `https://<project-ref>.supabase.co/auth/v1/callback` as an authorized redirect
+  URI, then put that client ID and secret in the Supabase Google provider.
+- In **Authentication > URL Configuration**, add this exact mobile redirect:
+  `com.youssefshawky.bariq://login-callback/`.
+- In **Authentication > Providers > Google**, enable Google only after adding
+  the Web client ID and secret. Those provider credentials never belong in
+  Flutter. Keep Email/Password enabled and turn on email confirmation.
 - Collect phone numbers in E.164 format, for example `+20...` for Egypt, but do
   not label them verified while SMS verification is intentionally disabled.
 - Add Android application ID `com.youssefshawky.bariq` to integration settings
@@ -41,8 +47,11 @@ remain deterministic without production credentials.
 
 ## Current Boundary
 
-This foundation initializes Supabase only when valid local configuration exists
-and lets App Startup read the Supabase Auth session. Email/password and Google
-OAuth screens, schema,
-profiles, vehicles, addresses, and booking tables belong to their own feature
-branches and migrations.
+The customer authentication slice supports email/password, confirmation/reset
+links, and browser-based Google OAuth. The mobile callback is registered on
+Android and iOS. The `profiles` migration grants only authenticated
+select/insert/update access and combines those grants with ownership RLS.
+
+The profile-completion UI, vehicles, addresses, and booking tables remain
+separate feature slices. Do not apply this migration to an unrelated Supabase
+project.

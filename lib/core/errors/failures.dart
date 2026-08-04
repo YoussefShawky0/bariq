@@ -20,3 +20,27 @@ final class UnexpectedFailure extends Failure {
         message: 'An unexpected error occurred.',
       );
 }
+
+final class ValidationFailure extends Failure {
+  const ValidationFailure({required super.code, required super.message});
+}
+
+final class AuthenticationFailure extends Failure {
+  const AuthenticationFailure({required super.code, required super.message});
+}
+
+final class NetworkFailure extends Failure {
+  const NetworkFailure()
+    : super(
+        code: 'NETWORK_FAILURE',
+        message: 'تعذر الاتصال بالخدمة. تحقق من الإنترنت وحاول مرة أخرى.',
+      );
+}
+
+final class BackendConfigurationFailure extends Failure {
+  const BackendConfigurationFailure()
+    : super(
+        code: 'BACKEND_NOT_CONFIGURED',
+        message: 'خدمة تسجيل الدخول غير مهيأة على هذا الإصدار.',
+      );
+}
