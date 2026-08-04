@@ -43,8 +43,10 @@ dependencies:
   flutter_dotenv: ^6.0.0
   logger: ^2.6.2
 
-  # Local startup state and secure session lookup
-  flutter_secure_storage: ^10.3.1
+  # Managed backend
+  supabase_flutter: 2.16.0
+
+  # Local startup state
   shared_preferences: ^2.5.5
 
   # Responsive UI and native startup
@@ -78,6 +80,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - .env
     - assets/branding/
     - assets/onboarding/
 

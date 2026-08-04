@@ -8,7 +8,7 @@ final class CompleteOnboarding {
 
   final OnboardingRepository _repository;
 
-  /// Persists completion so bootstrap can resolve the sign-in destination.
+  /// Persists completion so app startup can resolve the sign-in destination.
   ResultFuture<Unit> call() {
     return _repository.completeOnboarding();
   }
