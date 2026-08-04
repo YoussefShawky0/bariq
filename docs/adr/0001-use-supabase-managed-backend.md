@@ -19,7 +19,7 @@ server-side integrations.
 
 Use Supabase as the primary managed backend for the MVP:
 
-- Supabase Auth for phone/OTP and session persistence.
+- Supabase Auth for email/password, Google OAuth, and session persistence.
 - Supabase PostgreSQL with PostGIS for transactional and geospatial data.
 - Supabase Data API and RPC for client-accessible operations.
 - Supabase Realtime for booking and technician status updates.
@@ -62,6 +62,7 @@ is not justified for a solo-developer MVP.
 - Faster MVP delivery with fewer services to operate.
 - PostgreSQL and RLS become core engineering skills for the project.
 - Platform coupling is isolated behind repository and data-source boundaries.
-- Phone OTP requires a configured SMS provider and carries provider cost.
+- Email delivery and OAuth provider quotas remain managed-platform constraints;
+  ADR 0002 defines the accepted customer authentication flow.
 - A custom API can be introduced later only if measured constraints justify it
   and a new ADR replaces this decision.
