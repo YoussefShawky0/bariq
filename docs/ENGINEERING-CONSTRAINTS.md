@@ -124,6 +124,9 @@ core/theme/
 
 - لا API keys أوsecrets داخل source code.
 - client configuration عبر `flutter_dotenv` وملف `.env` غير متتبع.
+- Supabase هو الـbackend المعتمد للـMVP؛ أي custom backend يحتاج ADR وموافقة صريحة.
+- تطبيق Flutter يستخدم Supabase publishable key فقط؛ secret/service-role keys ممنوعة في العميل.
+- RLS إلزامي لكل table في schema مكشوف، والسياسات تتحقق من الملكية والصلاحية وليس authentication فقط.
 - server secrets في secret manager/environment.
 - لا نخزن card/payment tokens.
 - كل endpoint حساس يتحقق من الصلاحيات والبيانات server-side.
@@ -143,4 +146,3 @@ core/theme/
 - [ ] accessibility والـRTL والـresponsive راجعوا.
 - [ ] التوثيق وADR/API contract محدثان.
 - [ ] PR إلى `develop` بمراجعة مكتملة.
-
