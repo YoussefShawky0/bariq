@@ -63,6 +63,6 @@ OnboardingPage -> OnboardingCubit -> CompleteOnboarding
 
 ## Out of Scope
 
-- Phone/OTP authentication.
+- Email/password and Google authentication.
 - Runtime location permission; its contextual screen follows authentication.
 - Language switching; the MVP interface remains Arabic RTL.

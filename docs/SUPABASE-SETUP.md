@@ -26,8 +26,12 @@ remain deterministic without production credentials.
   project.
 - Keep development and production as separate environments before real user
   data is collected.
-- Enable Phone Auth and configure an SMS provider before testing OTP delivery.
-- Normalize phone numbers to E.164 format, for example `+20...` for Egypt.
+- Keep Email/Password enabled and use the default confirmation/reset email
+  templates while the project remains on the free plan.
+- Configure Google OAuth for the Android application and add every required
+  development/production redirect URI before enabling the Google button.
+- Collect phone numbers in E.164 format, for example `+20...` for Egypt, but do
+  not label them verified while SMS verification is intentionally disabled.
 - Add Android application ID `com.youssefshawky.bariq` to integration settings
   that require the mobile identity.
 - Use migrations for schema changes.
@@ -38,6 +42,7 @@ remain deterministic without production credentials.
 ## Current Boundary
 
 This foundation initializes Supabase only when valid local configuration exists
-and lets App Startup read the Supabase Auth session. Phone/OTP screens, schema,
+and lets App Startup read the Supabase Auth session. Email/password and Google
+OAuth screens, schema,
 profiles, vehicles, addresses, and booking tables belong to their own feature
 branches and migrations.
