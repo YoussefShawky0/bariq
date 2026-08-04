@@ -65,4 +65,44 @@ abstract final class AppTextStyles {
     fontSize: 12.sp,
     fontWeight: FontWeight.w600,
   );
+
+  static TextStyle get authTitle => TextStyle(
+    color: AppColors.navy,
+    fontSize: 28.sp,
+    fontWeight: FontWeight.w800,
+    height: 1.35,
+  );
+
+  static TextStyle get authSubtitle => TextStyle(
+    color: AppColors.textMuted,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    height: 1.7,
+  );
+
+  static TextStyle get fieldLabel => TextStyle(
+    color: AppColors.navy,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w600,
+  );
+
+  static TextStyle get authLink => TextStyle(
+    color: AppColors.aqua,
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle get authCaption => TextStyle(
+    color: AppColors.textMuted,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    height: 1.6,
+  );
+
+  static TextStyle get successCaption => TextStyle(
+    color: AppColors.success,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w600,
+    height: 1.6,
+  );
 }

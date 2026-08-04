@@ -5,6 +5,16 @@ import 'package:bariq/features/app_startup/data/repositories/app_startup_reposit
 import 'package:bariq/features/app_startup/domain/repositories/app_startup_repository.dart';
 import 'package:bariq/features/app_startup/domain/usecases/resolve_initial_destination.dart';
 import 'package:bariq/features/app_startup/presentation/cubit/app_startup_cubit.dart';
+import 'package:bariq/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:bariq/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:bariq/features/auth/domain/repositories/auth_repository.dart';
+import 'package:bariq/features/auth/domain/usecases/request_password_reset.dart';
+import 'package:bariq/features/auth/domain/usecases/sign_in_with_email.dart';
+import 'package:bariq/features/auth/domain/usecases/sign_in_with_google.dart';
+import 'package:bariq/features/auth/domain/usecases/sign_up_with_email.dart';
+import 'package:bariq/features/auth/domain/usecases/update_password.dart';
+import 'package:bariq/features/auth/domain/usecases/watch_auth_session.dart';
+import 'package:bariq/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bariq/features/onboarding/data/datasources/onboarding_local_data_source.dart';
 import 'package:bariq/features/onboarding/data/repositories/onboarding_repository_impl.dart';
 import 'package:bariq/features/onboarding/domain/repositories/onboarding_repository.dart';
@@ -20,6 +30,7 @@ final GetIt getIt = GetIt.instance;
 Future<void> configureDependencies({
   AppStartupRepository? appStartupRepository,
   OnboardingRepository? onboardingRepository,
+  AuthRepository? authRepository,
   SupabaseClient? supabaseClient,
 }) async {
   if (getIt.isRegistered<AppStartupCubit>()) {
@@ -55,4 +66,22 @@ Future<void> configureDependencies({
       () => CompleteOnboarding(getIt()),
     )
     ..registerFactory<OnboardingCubit>(() => OnboardingCubit(getIt()));
+  getIt
+    ..registerLazySingleton<AuthRemoteDataSource>(
+      () => SupabaseAuthRemoteDataSource(supabaseClient),
+    )
+    ..registerLazySingleton<AuthRepository>(
+      () => authRepository ?? AuthRepositoryImpl(getIt(), getIt()),
+    )
+    ..registerLazySingleton<SignInWithEmail>(() => SignInWithEmail(getIt()))
+    ..registerLazySingleton<SignUpWithEmail>(() => SignUpWithEmail(getIt()))
+    ..registerLazySingleton<RequestPasswordReset>(
+      () => RequestPasswordReset(getIt()),
+    )
+    ..registerLazySingleton<UpdatePassword>(() => UpdatePassword(getIt()))
+    ..registerLazySingleton<SignInWithGoogle>(() => SignInWithGoogle(getIt()))
+    ..registerLazySingleton<WatchAuthSession>(() => WatchAuthSession(getIt()))
+    ..registerFactory<AuthBloc>(
+      () => AuthBloc(getIt(), getIt(), getIt(), getIt(), getIt(), getIt()),
+    );
 }

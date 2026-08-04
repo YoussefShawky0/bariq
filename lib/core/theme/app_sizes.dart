@@ -15,4 +15,12 @@ abstract final class AppSizes {
   static double get onboardingDot => 7.r;
   static double get onboardingActiveDotWidth => 23.w;
   static double get onboardingDotSpacing => 4.w;
+  static double get authBrandWidth => 136.w;
+  static double get authContentMaxWidth => 440.w;
+  static double get authButtonHeight => 52.h;
+  static double get authIcon => 24.r;
+  static double get authFeedbackIcon => 64.r;
+  static double get authLoadingIndicator => 20.r;
+  static double get authLoadingStroke => 2.w;
+  static double get authDividerThickness => 1.h;
 }

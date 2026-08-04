@@ -4,13 +4,15 @@ import 'package:bariq/core/theme/app_sizes.dart';
 import 'package:flutter/material.dart';
 
 class BariqBrandMark extends StatelessWidget {
-  const BariqBrandMark({super.key});
+  const BariqBrandMark({this.width, super.key});
+
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return Image.asset(
       AppAssets.brandIcon,
-      width: AppSizes.brandMarkWidth,
+      width: width ?? AppSizes.brandMarkWidth,
       semanticLabel: AppStrings.brandSemanticLabel,
     );
   }
