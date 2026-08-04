@@ -50,6 +50,7 @@ dependencies:
   # Responsive UI and native startup
   flutter_screenutil: 5.9.3
   flutter_native_splash: ^2.4.5
+  introduction_screen: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +79,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets/branding/
+    - assets/onboarding/
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Variable.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

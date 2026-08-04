@@ -4,6 +4,11 @@ import 'package:bariq/features/bootstrap/data/repositories/bootstrap_repository_
 import 'package:bariq/features/bootstrap/domain/repositories/bootstrap_repository.dart';
 import 'package:bariq/features/bootstrap/domain/usecases/resolve_initial_destination.dart';
 import 'package:bariq/features/bootstrap/presentation/cubit/bootstrap_cubit.dart';
+import 'package:bariq/features/onboarding/data/datasources/onboarding_local_data_source.dart';
+import 'package:bariq/features/onboarding/data/repositories/onboarding_repository_impl.dart';
+import 'package:bariq/features/onboarding/domain/repositories/onboarding_repository.dart';
+import 'package:bariq/features/onboarding/domain/usecases/complete_onboarding.dart';
+import 'package:bariq/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -13,6 +18,7 @@ final GetIt getIt = GetIt.instance;
 
 Future<void> configureDependencies({
   BootstrapRepository? bootstrapRepository,
+  OnboardingRepository? onboardingRepository,
 }) async {
   if (getIt.isRegistered<BootstrapCubit>()) {
     await getIt.reset();
@@ -32,5 +38,15 @@ Future<void> configureDependencies({
     ..registerLazySingleton<ResolveInitialDestination>(
       () => ResolveInitialDestination(getIt()),
     )
-    ..registerFactory<BootstrapCubit>(() => BootstrapCubit(getIt()));
+    ..registerFactory<BootstrapCubit>(() => BootstrapCubit(getIt()))
+    ..registerLazySingleton<OnboardingLocalDataSource>(
+      () => OnboardingLocalDataSourceImpl(getIt()),
+    )
+    ..registerLazySingleton<OnboardingRepository>(
+      () => onboardingRepository ?? OnboardingRepositoryImpl(getIt(), getIt()),
+    )
+    ..registerLazySingleton<CompleteOnboarding>(
+      () => CompleteOnboarding(getIt()),
+    )
+    ..registerFactory<OnboardingCubit>(() => OnboardingCubit(getIt()));
 }
