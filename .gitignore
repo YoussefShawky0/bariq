@@ -49,3 +49,6 @@ app.*.map.json
 
 # Dart Tools
 devtools_options.yaml
+
+# Local client configuration
+.env

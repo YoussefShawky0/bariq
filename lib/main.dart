@@ -1,5 +1,7 @@
 import 'package:bariq/app/app.dart';
+import 'package:bariq/core/config/app_environment.dart';
 import 'package:bariq/core/di/injection.dart';
+import 'package:bariq/core/network/supabase_initializer.dart';
 import 'package:bariq/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +25,9 @@ Future<void> main() async {
     ),
   );
 
-  await configureDependencies();
+  final environment = await AppEnvironment.load();
+  final supabaseClient = await SupabaseInitializer.initialize(environment);
+  await configureDependencies(supabaseClient: supabaseClient);
   runApp(const BariqApp());
 
   widgetsBinding.addPostFrameCallback((_) => FlutterNativeSplash.remove());

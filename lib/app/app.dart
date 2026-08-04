@@ -2,8 +2,8 @@ import 'package:bariq/core/constants/app_strings.dart';
 import 'package:bariq/core/di/injection.dart';
 import 'package:bariq/core/theme/app_sizes.dart';
 import 'package:bariq/core/theme/app_theme.dart';
-import 'package:bariq/features/bootstrap/presentation/cubit/bootstrap_cubit.dart';
-import 'package:bariq/features/bootstrap/presentation/pages/bootstrap_page.dart';
+import 'package:bariq/features/app_startup/presentation/cubit/app_startup_cubit.dart';
+import 'package:bariq/features/app_startup/presentation/pages/app_startup_page.dart';
 import 'package:bariq/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,8 +20,8 @@ class BariqApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) {
-        return BlocProvider<BootstrapCubit>(
-          create: (_) => getIt<BootstrapCubit>()..initialize(),
+        return BlocProvider<AppStartupCubit>(
+          create: (_) => getIt<AppStartupCubit>()..initialize(),
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: AppStrings.appName,
@@ -37,7 +37,7 @@ class BariqApp extends StatelessWidget {
           ),
         );
       },
-      child: BootstrapPage(
+      child: AppStartupPage(
         onboardingCubitFactory: () => getIt<OnboardingCubit>(),
       ),
     );
