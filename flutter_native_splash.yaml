@@ -1,0 +1,13 @@
+flutter_native_splash:
+  # Full-screen artwork for Android < 12 and iOS.
+  background_image: assets/branding/bariq_splash_full.png
+  fullscreen: true
+  android_gravity: fill
+  ios_content_mode: scaleAspectFill
+  web_image_mode: cover
+
+  # Android 12+ only supports an opaque color, centered icon, and branding.
+  android_12:
+    color: "#F7F9FC"
+    image: assets/branding/bariq_android12_icon.png
+    branding: assets/branding/bariq_android12_branding.png
