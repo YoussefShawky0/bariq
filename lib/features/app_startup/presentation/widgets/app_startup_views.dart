@@ -24,6 +24,7 @@ class AppStartupReadyView extends StatelessWidget {
   String get _message => switch (destination) {
     AppDestination.onboarding => AppStrings.onboardingNext,
     AppDestination.signIn => AppStrings.signInNext,
+    AppDestination.profileCompletion => AppStrings.profileCompletionNext,
     AppDestination.home => AppStrings.homeNext,
   };
 

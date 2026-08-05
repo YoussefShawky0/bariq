@@ -6,6 +6,7 @@ import 'package:bariq/features/app_startup/presentation/cubit/app_startup_cubit.
 import 'package:bariq/features/app_startup/presentation/pages/app_startup_page.dart';
 import 'package:bariq/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bariq/features/onboarding/presentation/cubit/onboarding_cubit.dart';
+import 'package:bariq/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -41,6 +42,7 @@ class BariqApp extends StatelessWidget {
       child: AppStartupPage(
         onboardingCubitFactory: () => getIt<OnboardingCubit>(),
         authBlocFactory: () => getIt<AuthBloc>(),
+        profileBlocFactory: () => getIt<ProfileBloc>(),
       ),
     );
   }

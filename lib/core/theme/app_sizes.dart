@@ -23,4 +23,13 @@ abstract final class AppSizes {
   static double get authLoadingIndicator => 20.r;
   static double get authLoadingStroke => 2.w;
   static double get authDividerThickness => 1.h;
+  static double get profileBrandWidth => 112.w;
+  static double get profileContentMaxWidth => 520.w;
+  static double get profileAvatar => 96.r;
+  static double get profileAvatarIcon => 38.r;
+  static double get profileAvatarAction => 32.r;
+  static double get profileButtonHeight => 52.h;
+  static double get profileLoadingIndicator => 22.r;
+  static double get profileLoadingStroke => 2.w;
+  static double get profileTermsIcon => 22.r;
 }

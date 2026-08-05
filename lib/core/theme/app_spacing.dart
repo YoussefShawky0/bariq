@@ -13,4 +13,7 @@ abstract final class AppSpacing {
   static double get authCardHorizontal => 20.w;
   static double get authCardVertical => 24.h;
   static double get fieldGap => 12.h;
+  static double get profileCardHorizontal => 20.w;
+  static double get profileCardVertical => 22.h;
+  static double get profileAvatarGap => 10.h;
 }

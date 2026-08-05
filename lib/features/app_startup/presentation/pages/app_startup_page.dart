@@ -7,6 +7,8 @@ import 'package:bariq/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bariq/features/auth/presentation/pages/auth_page.dart';
 import 'package:bariq/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:bariq/features/onboarding/presentation/pages/onboarding_page.dart';
+import 'package:bariq/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:bariq/features/profile/presentation/pages/profile_completion_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,11 +16,13 @@ class AppStartupPage extends StatelessWidget {
   const AppStartupPage({
     required this.onboardingCubitFactory,
     required this.authBlocFactory,
+    required this.profileBlocFactory,
     super.key,
   });
 
   final OnboardingCubit Function() onboardingCubitFactory;
   final AuthBloc Function() authBlocFactory;
+  final ProfileBloc Function() profileBlocFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +30,20 @@ class AppStartupPage extends StatelessWidget {
       create: (_) => authBlocFactory(),
       child: _AppStartupAuthCoordinator(
         onboardingCubitFactory: onboardingCubitFactory,
+        profileBlocFactory: profileBlocFactory,
       ),
     );
   }
 }
 
 class _AppStartupAuthCoordinator extends StatelessWidget {
-  const _AppStartupAuthCoordinator({required this.onboardingCubitFactory});
+  const _AppStartupAuthCoordinator({
+    required this.onboardingCubitFactory,
+    required this.profileBlocFactory,
+  });
 
   final OnboardingCubit Function() onboardingCubitFactory;
+  final ProfileBloc Function() profileBlocFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +68,7 @@ class _AppStartupAuthCoordinator extends StatelessWidget {
           }
           return _AppStartupStateView(
             onboardingCubitFactory: onboardingCubitFactory,
+            profileBlocFactory: profileBlocFactory,
           );
         },
       ),
@@ -67,9 +77,13 @@ class _AppStartupAuthCoordinator extends StatelessWidget {
 }
 
 class _AppStartupStateView extends StatelessWidget {
-  const _AppStartupStateView({required this.onboardingCubitFactory});
+  const _AppStartupStateView({
+    required this.onboardingCubitFactory,
+    required this.profileBlocFactory,
+  });
 
   final OnboardingCubit Function() onboardingCubitFactory;
+  final ProfileBloc Function() profileBlocFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +95,7 @@ class _AppStartupStateView extends StatelessWidget {
           ready: (destination) => _AppStartupDestinationView(
             destination: destination,
             onboardingCubitFactory: onboardingCubitFactory,
+            profileBlocFactory: profileBlocFactory,
           ),
           failure: (_) => AppStartupFailureView(
             onRetry: context.read<AppStartupCubit>().initialize,
@@ -95,10 +110,12 @@ class _AppStartupDestinationView extends StatelessWidget {
   const _AppStartupDestinationView({
     required this.destination,
     required this.onboardingCubitFactory,
+    required this.profileBlocFactory,
   });
 
   final AppDestination destination;
   final OnboardingCubit Function() onboardingCubitFactory;
+  final ProfileBloc Function() profileBlocFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +127,12 @@ class _AppStartupDestinationView extends StatelessWidget {
         ),
       ),
       AppDestination.signIn => const AuthPage(),
+      AppDestination.profileCompletion => BlocProvider<ProfileBloc>(
+        create: (_) => profileBlocFactory()..add(const ProfileEvent.started()),
+        child: ProfileCompletionPage(
+          onCompleted: context.read<AppStartupCubit>().initialize,
+        ),
+      ),
       AppDestination.home => const AppStartupReadyView(AppDestination.home),
     };
   }

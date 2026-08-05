@@ -44,3 +44,11 @@ final class BackendConfigurationFailure extends Failure {
         message: 'خدمة تسجيل الدخول غير مهيأة على هذا الإصدار.',
       );
 }
+
+final class BackendFailure extends Failure {
+  const BackendFailure()
+    : super(
+        code: 'BACKEND_FAILURE',
+        message: 'تعذر حفظ البيانات الآن. حاول مرة أخرى بعد قليل.',
+      );
+}

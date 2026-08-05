@@ -19,6 +19,10 @@ import 'package:bariq/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bariq/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:bariq/features/onboarding/domain/usecases/complete_onboarding.dart';
 import 'package:bariq/features/onboarding/presentation/cubit/onboarding_cubit.dart';
+import 'package:bariq/features/profile/domain/repositories/profile_repository.dart';
+import 'package:bariq/features/profile/domain/usecases/load_customer_profile.dart';
+import 'package:bariq/features/profile/domain/usecases/save_customer_profile.dart';
+import 'package:bariq/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,22 +30,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'helpers/customer_profile_test_data.dart';
+
 class MockAppStartupRepository extends Mock implements AppStartupRepository {}
 
 class MockOnboardingRepository extends Mock implements OnboardingRepository {}
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
+class MockProfileRepository extends Mock implements ProfileRepository {}
+
 void main() {
   late MockAppStartupRepository repository;
   late MockOnboardingRepository onboardingRepository;
   late MockAuthRepository authRepository;
+  late MockProfileRepository profileRepository;
   late AppStartupCubit cubit;
 
   setUp(() {
     repository = MockAppStartupRepository();
     onboardingRepository = MockOnboardingRepository();
     authRepository = MockAuthRepository();
+    profileRepository = MockProfileRepository();
     when(authRepository.watchSession).thenAnswer((_) => const Stream.empty());
     cubit = AppStartupCubit(ResolveInitialDestination(repository));
   });
@@ -61,6 +71,7 @@ void main() {
         onboardingCubitFactory: () =>
             OnboardingCubit(CompleteOnboarding(onboardingRepository)),
         authBlocFactory: () => _buildAuthBloc(authRepository),
+        profileBlocFactory: () => _buildProfileBloc(profileRepository),
       ),
     );
     await cubit.initialize();
@@ -82,6 +93,7 @@ void main() {
         onboardingCubitFactory: () =>
             OnboardingCubit(CompleteOnboarding(onboardingRepository)),
         authBlocFactory: () => _buildAuthBloc(authRepository),
+        profileBlocFactory: () => _buildProfileBloc(profileRepository),
       ),
     );
     await cubit.initialize();
@@ -107,6 +119,7 @@ void main() {
         onboardingCubitFactory: () =>
             OnboardingCubit(CompleteOnboarding(onboardingRepository)),
         authBlocFactory: () => _buildAuthBloc(authRepository),
+        profileBlocFactory: () => _buildProfileBloc(profileRepository),
       ),
     );
     await cubit.initialize();
@@ -116,6 +129,33 @@ void main() {
     expect(find.text(AppStrings.passwordRecoveryTitle), findsOneWidget);
     expect(find.text(AppStrings.saveNewPassword), findsOneWidget);
   });
+
+  testWidgets('routes an authenticated incomplete customer to profile', (
+    tester,
+  ) async {
+    when(
+      repository.resolveInitialDestination,
+    ).thenAnswer((_) async => const Right(AppDestination.profileCompletion));
+    when(
+      profileRepository.loadCurrentProfile,
+    ).thenAnswer((_) async => Right(customerProfile()));
+
+    await tester.pumpWidget(
+      _TestApp(
+        cubit: cubit,
+        onboardingCubitFactory: () =>
+            OnboardingCubit(CompleteOnboarding(onboardingRepository)),
+        authBlocFactory: () => _buildAuthBloc(authRepository),
+        profileBlocFactory: () => _buildProfileBloc(profileRepository),
+      ),
+    );
+    await cubit.initialize();
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text(AppStrings.profileTitle), findsOneWidget);
+    expect(find.text(AppStrings.saveAndContinue), findsOneWidget);
+  });
 }
 
 class _TestApp extends StatelessWidget {
@@ -123,11 +163,13 @@ class _TestApp extends StatelessWidget {
     required this.cubit,
     required this.onboardingCubitFactory,
     required this.authBlocFactory,
+    required this.profileBlocFactory,
   });
 
   final AppStartupCubit cubit;
   final OnboardingCubit Function() onboardingCubitFactory;
   final AuthBloc Function() authBlocFactory;
+  final ProfileBloc Function() profileBlocFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +185,7 @@ class _TestApp extends StatelessWidget {
       child: AppStartupPage(
         onboardingCubitFactory: onboardingCubitFactory,
         authBlocFactory: authBlocFactory,
+        profileBlocFactory: profileBlocFactory,
       ),
     );
   }
@@ -155,4 +198,9 @@ AuthBloc _buildAuthBloc(AuthRepository repository) => AuthBloc(
   UpdatePassword(repository),
   SignInWithGoogle(repository),
   WatchAuthSession(repository),
+);
+
+ProfileBloc _buildProfileBloc(ProfileRepository repository) => ProfileBloc(
+  LoadCustomerProfile(repository),
+  SaveCustomerProfile(repository),
 );

@@ -49,9 +49,22 @@ remain deterministic without production credentials.
 
 The customer authentication slice supports email/password, confirmation/reset
 links, and browser-based Google OAuth. The mobile callback is registered on
-Android and iOS. The `profiles` migration grants only authenticated
-select/insert/update access and combines those grants with ownership RLS.
+Android and iOS. The profile-completion slice adds the terms contract, derives
+`completed_at` in PostgreSQL, and stores optional avatars in the private
+`profile-avatars` bucket. Both profile rows and avatar objects use ownership
+RLS, and table access is granted only to the authenticated role.
 
-The profile-completion UI, vehicles, addresses, and booking tables remain
-separate feature slices. Do not apply this migration to an unrelated Supabase
-project.
+Before applying migrations or opening a PR, start Docker Desktop and run:
+
+```powershell
+supabase start
+supabase db reset
+supabase test db
+```
+
+These commands validate the complete local migration chain and pgTAP ownership
+tests. They do not apply migrations to the hosted project. Link and deploy only
+to the dedicated BARIQ Supabase project after local checks pass.
+
+Vehicles, addresses, booking readiness, and profile editing remain separate
+feature slices.
