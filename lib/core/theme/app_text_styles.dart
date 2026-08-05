@@ -105,4 +105,23 @@ abstract final class AppTextStyles {
     fontWeight: FontWeight.w600,
     height: 1.6,
   );
+
+  static TextStyle get profileStep => TextStyle(
+    color: AppColors.aqua,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w800,
+  );
+
+  static TextStyle get sectionTitle => TextStyle(
+    color: AppColors.navy,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w800,
+  );
+
+  static TextStyle get helper => TextStyle(
+    color: AppColors.textMuted,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    height: 1.6,
+  );
 }

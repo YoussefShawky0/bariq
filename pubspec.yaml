@@ -54,6 +54,8 @@ dependencies:
   flutter_native_splash: ^2.4.5
   introduction_screen: ^4.0.0
   font_awesome_flutter: ^11.0.0
+  image_picker: ^1.2.3
+  image_cropper: ^12.2.1
 
 dev_dependencies:
   flutter_test:

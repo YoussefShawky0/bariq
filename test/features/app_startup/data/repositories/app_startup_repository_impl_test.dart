@@ -2,6 +2,7 @@ import 'package:bariq/core/errors/exceptions.dart';
 import 'package:bariq/core/errors/failures.dart';
 import 'package:bariq/core/utils/app_logger.dart';
 import 'package:bariq/features/app_startup/data/datasources/app_startup_local_data_source.dart';
+import 'package:bariq/features/app_startup/data/datasources/app_startup_profile_data_source.dart';
 import 'package:bariq/features/app_startup/data/datasources/app_startup_session_data_source.dart';
 import 'package:bariq/features/app_startup/data/repositories/app_startup_repository_impl.dart';
 import 'package:bariq/features/app_startup/domain/entities/app_destination.dart';
@@ -16,17 +17,23 @@ class MockAppStartupLocalDataSource extends Mock
 class MockAppStartupSessionDataSource extends Mock
     implements AppStartupSessionDataSource {}
 
+class MockAppStartupProfileDataSource extends Mock
+    implements AppStartupProfileDataSource {}
+
 void main() {
   late MockAppStartupLocalDataSource localDataSource;
   late MockAppStartupSessionDataSource sessionDataSource;
+  late MockAppStartupProfileDataSource profileDataSource;
   late AppStartupRepositoryImpl repository;
 
   setUp(() {
     localDataSource = MockAppStartupLocalDataSource();
     sessionDataSource = MockAppStartupSessionDataSource();
+    profileDataSource = MockAppStartupProfileDataSource();
     repository = AppStartupRepositoryImpl(
       localDataSource,
       sessionDataSource,
+      profileDataSource,
       AppLogger(Logger(level: Level.off)),
     );
   });
@@ -40,14 +47,15 @@ void main() {
       result,
       const Right<Failure, AppDestination>(AppDestination.onboarding),
     );
-    verifyNever(sessionDataSource.hasAuthenticatedSession);
+    verifyNever(sessionDataSource.currentUserId);
+    verifyNever(() => profileDataSource.hasCompletedProfile(any()));
   });
 
   test(
     'returns sign in when onboarding is complete without a session',
     () async {
       when(localDataSource.isOnboardingCompleted).thenAnswer((_) async => true);
-      when(sessionDataSource.hasAuthenticatedSession).thenReturn(false);
+      when(sessionDataSource.currentUserId).thenReturn(null);
 
       final result = await repository.resolveInitialDestination();
 
@@ -58,14 +66,35 @@ void main() {
     },
   );
 
-  test('returns home when onboarding and session are available', () async {
+  test('returns profile completion for an incomplete customer', () async {
     when(localDataSource.isOnboardingCompleted).thenAnswer((_) async => true);
-    when(sessionDataSource.hasAuthenticatedSession).thenReturn(true);
+    when(sessionDataSource.currentUserId).thenReturn('customer-id');
+    when(
+      () => profileDataSource.hasCompletedProfile('customer-id'),
+    ).thenAnswer((_) async => false);
 
     final result = await repository.resolveInitialDestination();
 
-    expect(result, const Right<Failure, AppDestination>(AppDestination.home));
+    expect(
+      result,
+      const Right<Failure, AppDestination>(AppDestination.profileCompletion),
+    );
   });
+
+  test(
+    'returns home when session and completed profile are available',
+    () async {
+      when(localDataSource.isOnboardingCompleted).thenAnswer((_) async => true);
+      when(sessionDataSource.currentUserId).thenReturn('customer-id');
+      when(
+        () => profileDataSource.hasCompletedProfile('customer-id'),
+      ).thenAnswer((_) async => true);
+
+      final result = await repository.resolveInitialDestination();
+
+      expect(result, const Right<Failure, AppDestination>(AppDestination.home));
+    },
+  );
 
   test('maps cache exceptions to CacheFailure', () async {
     when(

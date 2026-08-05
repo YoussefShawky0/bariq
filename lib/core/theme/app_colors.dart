@@ -14,4 +14,6 @@ abstract final class AppColors {
   static const Color error = Color(0xFFB3261E);
   static const Color success = Color(0xFF167A5A);
   static const Color successSurface = Color(0xFFEAF7F2);
+  static const Color navySurface = Color(0xFFF0F4FA);
+  static const Color scrim = Color(0x330B1930);
 }

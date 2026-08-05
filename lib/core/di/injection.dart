@@ -1,5 +1,6 @@
 import 'package:bariq/core/utils/app_logger.dart';
 import 'package:bariq/features/app_startup/data/datasources/app_startup_local_data_source.dart';
+import 'package:bariq/features/app_startup/data/datasources/app_startup_profile_data_source.dart';
 import 'package:bariq/features/app_startup/data/datasources/app_startup_session_data_source.dart';
 import 'package:bariq/features/app_startup/data/repositories/app_startup_repository_impl.dart';
 import 'package:bariq/features/app_startup/domain/repositories/app_startup_repository.dart';
@@ -20,6 +21,12 @@ import 'package:bariq/features/onboarding/data/repositories/onboarding_repositor
 import 'package:bariq/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:bariq/features/onboarding/domain/usecases/complete_onboarding.dart';
 import 'package:bariq/features/onboarding/presentation/cubit/onboarding_cubit.dart';
+import 'package:bariq/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:bariq/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:bariq/features/profile/domain/repositories/profile_repository.dart';
+import 'package:bariq/features/profile/domain/usecases/load_customer_profile.dart';
+import 'package:bariq/features/profile/domain/usecases/save_customer_profile.dart';
+import 'package:bariq/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,6 +38,7 @@ Future<void> configureDependencies({
   AppStartupRepository? appStartupRepository,
   OnboardingRepository? onboardingRepository,
   AuthRepository? authRepository,
+  ProfileRepository? profileRepository,
   SupabaseClient? supabaseClient,
 }) async {
   if (getIt.isRegistered<AppStartupCubit>()) {
@@ -47,10 +55,13 @@ Future<void> configureDependencies({
     ..registerLazySingleton<AppStartupSessionDataSource>(
       () => SupabaseAppStartupSessionDataSource(supabaseClient),
     )
+    ..registerLazySingleton<AppStartupProfileDataSource>(
+      () => SupabaseAppStartupProfileDataSource(supabaseClient),
+    )
     ..registerLazySingleton<AppStartupRepository>(
       () =>
           appStartupRepository ??
-          AppStartupRepositoryImpl(getIt(), getIt(), getIt()),
+          AppStartupRepositoryImpl(getIt(), getIt(), getIt(), getIt()),
     )
     ..registerLazySingleton<ResolveInitialDestination>(
       () => ResolveInitialDestination(getIt()),
@@ -83,5 +94,18 @@ Future<void> configureDependencies({
     ..registerLazySingleton<WatchAuthSession>(() => WatchAuthSession(getIt()))
     ..registerFactory<AuthBloc>(
       () => AuthBloc(getIt(), getIt(), getIt(), getIt(), getIt(), getIt()),
-    );
+    )
+    ..registerLazySingleton<ProfileRemoteDataSource>(
+      () => SupabaseProfileRemoteDataSource(supabaseClient),
+    )
+    ..registerLazySingleton<ProfileRepository>(
+      () => profileRepository ?? ProfileRepositoryImpl(getIt(), getIt()),
+    )
+    ..registerLazySingleton<LoadCustomerProfile>(
+      () => LoadCustomerProfile(getIt()),
+    )
+    ..registerLazySingleton<SaveCustomerProfile>(
+      () => SaveCustomerProfile(getIt()),
+    )
+    ..registerFactory<ProfileBloc>(() => ProfileBloc(getIt(), getIt()));
 }

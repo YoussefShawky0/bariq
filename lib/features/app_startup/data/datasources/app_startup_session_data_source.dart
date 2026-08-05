@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AppStartupSessionDataSource {
-  bool hasAuthenticatedSession();
+  String? currentUserId();
 }
 
 final class SupabaseAppStartupSessionDataSource
@@ -11,6 +11,5 @@ final class SupabaseAppStartupSessionDataSource
   final SupabaseClient? _supabaseClient;
 
   @override
-  bool hasAuthenticatedSession() =>
-      _supabaseClient?.auth.currentSession != null;
+  String? currentUserId() => _supabaseClient?.auth.currentSession?.user.id;
 }

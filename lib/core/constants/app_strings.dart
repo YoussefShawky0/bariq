@@ -8,6 +8,7 @@ abstract final class AppStrings {
   static const String onboardingNext = 'الخطوة التالية: تجربة التعريف بالتطبيق';
   static const String signInNext = 'الخطوة التالية: تسجيل الدخول';
   static const String homeNext = 'تم العثور على جلسة محفوظة';
+  static const String profileCompletionNext = 'استكمال بيانات الحساب';
   static const String initializationFailed = 'تعذر تجهيز التطبيق';
   static const String retry = 'إعادة المحاولة';
   static const String genericError = 'حدث خطأ غير متوقع. حاول مرة أخرى.';
@@ -64,6 +65,47 @@ abstract final class AppStrings {
   static const String backToSignIn = 'العودة لتسجيل الدخول';
   static const String secureAuthHint =
       'لن نشارك بياناتك، ولن نطلب بطاقة أو رخصة من العميل.';
+  static const String profileStep = 'خطوة أخيرة';
+  static const String profileTitle = 'خلّينا نعرفك';
+  static const String profileSubtitle =
+      'اسمك هو المطلوب دلوقتي. كمّل باقي البيانات لو حابب عشان أول حجز يبقى أسرع.';
+  static const String profilePhoto = 'صورة الحساب';
+  static const String addProfilePhoto = 'إضافة صورة اختيارية';
+  static const String changeProfilePhoto = 'تغيير الصورة';
+  static const String fullName = 'الاسم بالكامل *';
+  static const String phoneNumber = 'رقم الهاتف';
+  static const String egyptCountryCodePrefix = '+20 ';
+  static const String phoneHint = '01012345678';
+  static const String phoneUnverifiedHint =
+      'اكتب رقمك المصري فقط؛ الصفر الأول مقبول ولن يُخزَّن.';
+  static const String city = 'المحافظة';
+  static const String governorateHint = 'اختر المحافظة (اختياري)';
+  static const String area = 'المنطقة';
+  static const String bookingDetailsSection = 'وفّر وقتك عند أول حجز';
+  static const String bookingDetailsHint =
+      'الهاتف والمحافظة والمنطقة هنطلبهم قبل تأكيد أول حجز.';
+  static const String termsAgreement =
+      'قرأت ووافقت على الشروط وملخص استخدام البيانات.';
+  static const String viewTerms = 'عرض التفاصيل';
+  static const String termsTitle = 'الشروط واستخدام البيانات';
+  static const String termsIntro =
+      'بنستخدم بيانات الحساب لتنفيذ الخدمة، التواصل بخصوص الحجز، وحماية حسابك.';
+  static const String termsPrivacy =
+      'صورتك اختيارية ومحفوظة بشكل خاص. لا نطلب بطاقة شخصية أو رخصة من العميل.';
+  static const String termsControl =
+      'تقدر تعدّل بياناتك لاحقًا من الحساب، وطلبات الحذف هتتضاف ضمن إعدادات الخصوصية.';
+  static const String close = 'إغلاق';
+  static const String saveAndContinue = 'حفظ ومتابعة';
+  static const String profileSecureHint =
+      'بياناتك محمية بصلاحيات ملكية، ومحدش يقدر يقرأ بروفايل غيره.';
+  static const String profileLoadFailed = 'تعذر تحميل بيانات الحساب.';
+  static const String retryProfile = 'حاول مرة أخرى';
+  static const String avatarFormatError = 'اختَر صورة JPG أو PNG أو WebP.';
+  static const String avatarReadError = 'تعذر قراءة الصورة. جرّب صورة أخرى.';
+  static const String avatarSemanticLabel = 'صورة حساب العميل';
+  static const String cropAvatarTitle = 'ضبط صورة الحساب';
+  static const String cropAvatarDone = 'استخدام';
+  static const String cropAvatarCancel = 'إلغاء';
 
   static String onboardingProgressLabel(int page, int total) =>
       'الشاشة $page من $total';

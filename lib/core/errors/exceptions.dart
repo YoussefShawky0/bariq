@@ -11,3 +11,7 @@ final class BackendConfigurationException implements Exception {
 final class ExternalAuthLaunchException implements Exception {
   const ExternalAuthLaunchException();
 }
+
+final class UnauthenticatedException implements Exception {
+  const UnauthenticatedException();
+}
