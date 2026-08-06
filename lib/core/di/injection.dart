@@ -27,6 +27,13 @@ import 'package:bariq/features/profile/domain/repositories/profile_repository.da
 import 'package:bariq/features/profile/domain/usecases/load_customer_profile.dart';
 import 'package:bariq/features/profile/domain/usecases/save_customer_profile.dart';
 import 'package:bariq/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:bariq/features/vehicles/data/datasources/vehicle_remote_data_source.dart';
+import 'package:bariq/features/vehicles/data/repositories/vehicle_repository_impl.dart';
+import 'package:bariq/features/vehicles/domain/repositories/vehicle_repository.dart';
+import 'package:bariq/features/vehicles/domain/usecases/delete_vehicle.dart';
+import 'package:bariq/features/vehicles/domain/usecases/load_vehicles.dart';
+import 'package:bariq/features/vehicles/domain/usecases/save_vehicle.dart';
+import 'package:bariq/features/vehicles/presentation/bloc/vehicles_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +46,7 @@ Future<void> configureDependencies({
   OnboardingRepository? onboardingRepository,
   AuthRepository? authRepository,
   ProfileRepository? profileRepository,
+  VehicleRepository? vehicleRepository,
   SupabaseClient? supabaseClient,
 }) async {
   if (getIt.isRegistered<AppStartupCubit>()) {
@@ -107,5 +115,17 @@ Future<void> configureDependencies({
     ..registerLazySingleton<SaveCustomerProfile>(
       () => SaveCustomerProfile(getIt()),
     )
-    ..registerFactory<ProfileBloc>(() => ProfileBloc(getIt(), getIt()));
+    ..registerFactory<ProfileBloc>(() => ProfileBloc(getIt(), getIt()))
+    ..registerLazySingleton<VehicleRemoteDataSource>(
+      () => SupabaseVehicleRemoteDataSource(supabaseClient),
+    )
+    ..registerLazySingleton<VehicleRepository>(
+      () => vehicleRepository ?? VehicleRepositoryImpl(getIt(), getIt()),
+    )
+    ..registerLazySingleton<LoadVehicles>(() => LoadVehicles(getIt()))
+    ..registerLazySingleton<SaveVehicle>(() => SaveVehicle(getIt()))
+    ..registerLazySingleton<DeleteVehicle>(() => DeleteVehicle(getIt()))
+    ..registerFactory<VehiclesBloc>(
+      () => VehiclesBloc(getIt(), getIt(), getIt()),
+    );
 }

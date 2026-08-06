@@ -1,6 +1,8 @@
 begin;
+set local role postgres;
 create extension if not exists pgtap with schema extensions;
-select plan(10);
+set local search_path = public, extensions, pgtap;
+select plan(11);
 
 insert into auth.users (id, email)
 values
@@ -48,7 +50,7 @@ select results_eq(
 select lives_ok(
   $$
     update public.profiles
-    set city = 'Cairo'
+    set city = 'القاهرة'
     where id = '11111111-1111-4111-8111-111111111111'
   $$,
   'a customer can update their own profile'
@@ -120,6 +122,7 @@ select throws_ok(
 );
 
 reset role;
+set local role postgres;
 
 select results_eq(
   $$

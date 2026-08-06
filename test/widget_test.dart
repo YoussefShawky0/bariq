@@ -23,6 +23,11 @@ import 'package:bariq/features/profile/domain/repositories/profile_repository.da
 import 'package:bariq/features/profile/domain/usecases/load_customer_profile.dart';
 import 'package:bariq/features/profile/domain/usecases/save_customer_profile.dart';
 import 'package:bariq/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:bariq/features/vehicles/domain/repositories/vehicle_repository.dart';
+import 'package:bariq/features/vehicles/domain/usecases/delete_vehicle.dart';
+import 'package:bariq/features/vehicles/domain/usecases/load_vehicles.dart';
+import 'package:bariq/features/vehicles/domain/usecases/save_vehicle.dart';
+import 'package:bariq/features/vehicles/presentation/bloc/vehicles_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,11 +45,14 @@ class MockAuthRepository extends Mock implements AuthRepository {}
 
 class MockProfileRepository extends Mock implements ProfileRepository {}
 
+class MockVehicleRepository extends Mock implements VehicleRepository {}
+
 void main() {
   late MockAppStartupRepository repository;
   late MockOnboardingRepository onboardingRepository;
   late MockAuthRepository authRepository;
   late MockProfileRepository profileRepository;
+  late MockVehicleRepository vehicleRepository;
   late AppStartupCubit cubit;
 
   setUp(() {
@@ -52,7 +60,11 @@ void main() {
     onboardingRepository = MockOnboardingRepository();
     authRepository = MockAuthRepository();
     profileRepository = MockProfileRepository();
+    vehicleRepository = MockVehicleRepository();
     when(authRepository.watchSession).thenAnswer((_) => const Stream.empty());
+    when(
+      vehicleRepository.loadVehicles,
+    ).thenAnswer((_) async => const Right([]));
     cubit = AppStartupCubit(ResolveInitialDestination(repository));
   });
 
@@ -72,6 +84,7 @@ void main() {
             OnboardingCubit(CompleteOnboarding(onboardingRepository)),
         authBlocFactory: () => _buildAuthBloc(authRepository),
         profileBlocFactory: () => _buildProfileBloc(profileRepository),
+        vehiclesBlocFactory: () => _buildVehiclesBloc(vehicleRepository),
       ),
     );
     await cubit.initialize();
@@ -94,6 +107,7 @@ void main() {
             OnboardingCubit(CompleteOnboarding(onboardingRepository)),
         authBlocFactory: () => _buildAuthBloc(authRepository),
         profileBlocFactory: () => _buildProfileBloc(profileRepository),
+        vehiclesBlocFactory: () => _buildVehiclesBloc(vehicleRepository),
       ),
     );
     await cubit.initialize();
@@ -120,6 +134,7 @@ void main() {
             OnboardingCubit(CompleteOnboarding(onboardingRepository)),
         authBlocFactory: () => _buildAuthBloc(authRepository),
         profileBlocFactory: () => _buildProfileBloc(profileRepository),
+        vehiclesBlocFactory: () => _buildVehiclesBloc(vehicleRepository),
       ),
     );
     await cubit.initialize();
@@ -147,6 +162,7 @@ void main() {
             OnboardingCubit(CompleteOnboarding(onboardingRepository)),
         authBlocFactory: () => _buildAuthBloc(authRepository),
         profileBlocFactory: () => _buildProfileBloc(profileRepository),
+        vehiclesBlocFactory: () => _buildVehiclesBloc(vehicleRepository),
       ),
     );
     await cubit.initialize();
@@ -164,12 +180,14 @@ class _TestApp extends StatelessWidget {
     required this.onboardingCubitFactory,
     required this.authBlocFactory,
     required this.profileBlocFactory,
+    required this.vehiclesBlocFactory,
   });
 
   final AppStartupCubit cubit;
   final OnboardingCubit Function() onboardingCubitFactory;
   final AuthBloc Function() authBlocFactory;
   final ProfileBloc Function() profileBlocFactory;
+  final VehiclesBloc Function() vehiclesBlocFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +204,7 @@ class _TestApp extends StatelessWidget {
         onboardingCubitFactory: onboardingCubitFactory,
         authBlocFactory: authBlocFactory,
         profileBlocFactory: profileBlocFactory,
+        vehiclesBlocFactory: vehiclesBlocFactory,
       ),
     );
   }
@@ -203,4 +222,10 @@ AuthBloc _buildAuthBloc(AuthRepository repository) => AuthBloc(
 ProfileBloc _buildProfileBloc(ProfileRepository repository) => ProfileBloc(
   LoadCustomerProfile(repository),
   SaveCustomerProfile(repository),
+);
+
+VehiclesBloc _buildVehiclesBloc(VehicleRepository repository) => VehiclesBloc(
+  LoadVehicles(repository),
+  SaveVehicle(repository),
+  DeleteVehicle(repository),
 );

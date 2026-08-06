@@ -52,7 +52,9 @@ links, and browser-based Google OAuth. The mobile callback is registered on
 Android and iOS. The profile-completion slice adds the terms contract, derives
 `completed_at` in PostgreSQL, and stores optional avatars in the private
 `profile-avatars` bucket. Both profile rows and avatar objects use ownership
-RLS, and table access is granted only to the authenticated role.
+RLS, and table access is granted only to the authenticated role. The vehicle
+slice exposes owned rows as authenticated read-only data; all mutations use
+owner-checked RPCs so clients cannot bypass the one-default-vehicle invariant.
 
 Before applying migrations or opening a PR, start Docker Desktop and run:
 
@@ -66,5 +68,5 @@ These commands validate the complete local migration chain and pgTAP ownership
 tests. They do not apply migrations to the hosted project. Link and deploy only
 to the dedicated BARIQ Supabase project after local checks pass.
 
-Vehicles, addresses, booking readiness, and profile editing remain separate
-feature slices.
+Addresses, booking readiness, and profile editing remain separate feature
+slices.

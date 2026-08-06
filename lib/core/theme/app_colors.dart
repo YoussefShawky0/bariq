@@ -12,6 +12,7 @@ abstract final class AppColors {
   static const Color aquaSurface = Color(0xFFE9FAFA);
   static const Color dotInactive = Color(0xFFD5DEE9);
   static const Color error = Color(0xFFB3261E);
+  static const Color errorSurface = Color(0xFFFCEDEA);
   static const Color success = Color(0xFF167A5A);
   static const Color successSurface = Color(0xFFEAF7F2);
   static const Color navySurface = Color(0xFFF0F4FA);

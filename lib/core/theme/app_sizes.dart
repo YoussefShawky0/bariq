@@ -32,4 +32,11 @@ abstract final class AppSizes {
   static double get profileLoadingIndicator => 22.r;
   static double get profileLoadingStroke => 2.w;
   static double get profileTermsIcon => 22.r;
+  static double get vehiclesContentMaxWidth => 620.w;
+  static double get vehicleCardIcon => 48.r;
+  static double get vehicleIcon => 24.r;
+  static double get vehicleEmptyIcon => 64.r;
+  static double get vehicleLoadingIndicator => 24.r;
+  static double get vehicleLoadingStroke => 2.w;
+  static double get vehicleButtonHeight => 52.h;
 }
