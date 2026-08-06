@@ -106,11 +106,47 @@ abstract final class AppStrings {
   static const String cropAvatarTitle = 'ضبط صورة الحساب';
   static const String cropAvatarDone = 'استخدام';
   static const String cropAvatarCancel = 'إلغاء';
+  static const String vehiclesTitle = 'سياراتي';
+  static const String vehiclesSubtitle =
+      'أضف بيانات عربيتك عشان نحدد الخدمة والسعر المناسبين.';
+  static const String addVehicle = 'إضافة عربية';
+  static const String editVehicle = 'تعديل العربية';
+  static const String emptyVehiclesTitle = 'لسه مفيش عربيات مضافة';
+  static const String emptyVehiclesBody =
+      'ضيف أول عربية، وهتكون هي الاختيار الافتراضي في الحجز.';
+  static const String defaultVehicle = 'الافتراضية';
+  static const String vehicleMake = 'الماركة *';
+  static const String vehicleModel = 'الموديل *';
+  static const String vehicleYear = 'سنة الصنع *';
+  static const String vehicleColor = 'اللون *';
+  static const String vehiclePlate = 'رقم اللوحة *';
+  static const String vehiclePlateHint = 'مثال: أ ب ج ١٢٣';
+  static const String vehicleClassLabel = 'فئة العربية *';
+  static const String makeDefaultVehicle = 'استخدمها كعربيتي الافتراضية';
+  static const String makeDefaultVehicleHint =
+      'هنختارها تلقائيًا عند بدء أي حجز جديد.';
+  static const String defaultVehicleLockedHint =
+      'لتغيير الافتراضية، اختَر عربية تانية واجعلها الافتراضية.';
+  static const String saveVehicle = 'حفظ العربية';
+  static const String deleteVehicle = 'حذف';
+  static const String deleteVehicleTitle = 'حذف العربية؟';
+  static const String cancel = 'إلغاء';
+  static const String vehicleSaved = 'تم حفظ العربية بنجاح.';
+  static const String vehicleDeleted = 'تم حذف العربية.';
+  static const String vehiclesLoadFailed = 'تعذر تحميل العربيات.';
+  static const String vehicleOwnershipHint =
+      'بيانات العربيات خاصة بحسابك، ولا نطلب صورة رخصة من العميل.';
 
   static String onboardingProgressLabel(int page, int total) =>
       'الشاشة $page من $total';
 
   static String emailSentTo(String email) => 'تم الإرسال إلى $email';
+
+  static String deleteVehicleBody(String name) =>
+      'هتحذف $name من حسابك. تقدر تضيفها من جديد لاحقًا.';
+
+  static String vehicleMeta(int year, String vehicleClass) =>
+      '$year • $vehicleClass';
 
   static const Locale arabicLocale = Locale('ar');
   static const List<Locale> supportedLocales = [arabicLocale];

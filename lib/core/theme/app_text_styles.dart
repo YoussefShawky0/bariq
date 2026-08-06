@@ -124,4 +124,16 @@ abstract final class AppTextStyles {
     fontWeight: FontWeight.w500,
     height: 1.6,
   );
+
+  static TextStyle get vehicleName => TextStyle(
+    color: AppColors.navy,
+    fontSize: 17.sp,
+    fontWeight: FontWeight.w800,
+  );
+
+  static TextStyle get vehicleBadge => TextStyle(
+    color: AppColors.aqua,
+    fontSize: 11.sp,
+    fontWeight: FontWeight.w800,
+  );
 }
