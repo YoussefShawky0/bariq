@@ -60,8 +60,9 @@ void main() {
   }
 
   test('loads addresses from remote data source', () async {
-    when(remoteDataSource.fetchAddresses)
-        .thenAnswer((_) async => [testAddress()]);
+    when(
+      remoteDataSource.fetchAddresses,
+    ).thenAnswer((_) async => [testAddress()]);
 
     final result = await repository.loadAddresses();
 
@@ -71,8 +72,9 @@ void main() {
   });
 
   test('inserts a new address when id is null', () async {
-    when(() => remoteDataSource.insertAddress(any(), 'customer-id'))
-        .thenAnswer((_) async => testAddress());
+    when(
+      () => remoteDataSource.insertAddress(any(), 'customer-id'),
+    ).thenAnswer((_) async => testAddress());
 
     final result = await repository.saveAddress(testAddressInput());
 
@@ -81,8 +83,9 @@ void main() {
 
   test('updates an address when id is provided', () async {
     final input = testAddressInput(id: 'existing-id');
-    when(() => remoteDataSource.updateAddress(input))
-        .thenAnswer((_) async => testAddress(id: 'existing-id'));
+    when(
+      () => remoteDataSource.updateAddress(input),
+    ).thenAnswer((_) async => testAddress(id: 'existing-id'));
 
     final result = await repository.saveAddress(input);
 
@@ -106,8 +109,9 @@ void main() {
   });
 
   test('maps timeout to a network failure', () async {
-    when(remoteDataSource.fetchAddresses)
-        .thenThrow(TimeoutException('connection timed out'));
+    when(
+      remoteDataSource.fetchAddresses,
+    ).thenThrow(TimeoutException('connection timed out'));
     stubLogger();
 
     final result = await repository.loadAddresses();
@@ -116,8 +120,9 @@ void main() {
   });
 
   test('deletes an address remotely', () async {
-    when(() => remoteDataSource.deleteAddress('address-id-1'))
-        .thenAnswer((_) async {});
+    when(
+      () => remoteDataSource.deleteAddress('address-id-1'),
+    ).thenAnswer((_) async {});
 
     final result = await repository.deleteAddress('address-id-1');
 

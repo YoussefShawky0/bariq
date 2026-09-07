@@ -30,8 +30,9 @@ void main() {
   });
 
   test('maps CacheException to CacheFailure', () async {
-    when(localDataSource.completeOnboarding)
-        .thenThrow(const CacheException('write failed'));
+    when(
+      localDataSource.completeOnboarding,
+    ).thenThrow(const CacheException('write failed'));
 
     final result = await repository.completeOnboarding();
 
@@ -39,8 +40,9 @@ void main() {
   });
 
   test('maps unexpected exceptions to UnexpectedFailure', () async {
-    when(localDataSource.completeOnboarding)
-        .thenThrow(StateError('unexpected'));
+    when(
+      localDataSource.completeOnboarding,
+    ).thenThrow(StateError('unexpected'));
 
     final result = await repository.completeOnboarding();
 

@@ -28,8 +28,9 @@ void main() {
   blocTest<OnboardingCubit, OnboardingState>(
     'emits saving then completed when persistence succeeds',
     setUp: () {
-      when(repository.completeOnboarding)
-          .thenAnswer((_) async => const Right(unit));
+      when(
+        repository.completeOnboarding,
+      ).thenAnswer((_) async => const Right(unit));
     },
     build: () => OnboardingCubit(useCase),
     act: (cubit) => cubit.complete(),
@@ -42,8 +43,9 @@ void main() {
   blocTest<OnboardingCubit, OnboardingState>(
     'emits saving then failure when persistence fails',
     setUp: () {
-      when(repository.completeOnboarding)
-          .thenAnswer((_) async => const Left(CacheFailure()));
+      when(
+        repository.completeOnboarding,
+      ).thenAnswer((_) async => const Left(CacheFailure()));
     },
     build: () => OnboardingCubit(useCase),
     seed: () => const OnboardingState.viewing(currentPage: 1),

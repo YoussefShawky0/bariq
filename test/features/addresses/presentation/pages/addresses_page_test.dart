@@ -48,8 +48,9 @@ void main() {
   });
 
   testWidgets('renders saved address card with default badge', (tester) async {
-    when(repository.loadAddresses)
-        .thenAnswer((_) async => Right([testAddress()]));
+    when(
+      repository.loadAddresses,
+    ).thenAnswer((_) async => Right([testAddress()]));
 
     await _pumpPage(tester, bloc);
 
@@ -60,8 +61,9 @@ void main() {
   testWidgets('shows delete confirmation dialog on delete press', (
     tester,
   ) async {
-    when(repository.loadAddresses)
-        .thenAnswer((_) async => Right([testAddress()]));
+    when(
+      repository.loadAddresses,
+    ).thenAnswer((_) async => Right([testAddress()]));
 
     await _pumpPage(tester, bloc);
 

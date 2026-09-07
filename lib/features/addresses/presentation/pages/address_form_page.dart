@@ -82,8 +82,9 @@ class _AddressFormPageState extends State<AddressFormPage> {
           },
           failure: (_, failure, mutation) {
             if (mutation == AddressMutation.save) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(failure.message)));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(failure.message)));
             }
           },
         );

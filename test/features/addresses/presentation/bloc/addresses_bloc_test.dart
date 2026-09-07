@@ -34,8 +34,9 @@ void main() {
   blocTest<AddressesBloc, AddressesState>(
     'loads the current customer addresses and zones',
     build: () {
-      when(repository.loadAddresses)
-          .thenAnswer((_) async => Right([testAddress()]));
+      when(
+        repository.loadAddresses,
+      ).thenAnswer((_) async => Right([testAddress()]));
       return buildBloc();
     },
     act: (bloc) => bloc.add(const AddressesEvent.started()),
@@ -45,8 +46,9 @@ void main() {
   blocTest<AddressesBloc, AddressesState>(
     'emits failure state when loading addresses fails',
     build: () {
-      when(repository.loadAddresses)
-          .thenAnswer((_) async => const Left(NetworkFailure()));
+      when(
+        repository.loadAddresses,
+      ).thenAnswer((_) async => const Left(NetworkFailure()));
       return buildBloc();
     },
     act: (bloc) => bloc.add(const AddressesEvent.started()),
@@ -56,10 +58,12 @@ void main() {
   blocTest<AddressesBloc, AddressesState>(
     'saves and reloads addresses list',
     build: () {
-      when(() => repository.saveAddress(any()))
-          .thenAnswer((_) async => Right(testAddress()));
-      when(repository.loadAddresses)
-          .thenAnswer((_) async => Right([testAddress()]));
+      when(
+        () => repository.saveAddress(any()),
+      ).thenAnswer((_) async => Right(testAddress()));
+      when(
+        repository.loadAddresses,
+      ).thenAnswer((_) async => Right([testAddress()]));
       return buildBloc();
     },
     seed: () => const AddressesState.ready([]),
@@ -71,8 +75,9 @@ void main() {
   blocTest<AddressesBloc, AddressesState>(
     'deletes and reloads addresses list',
     build: () {
-      when(() => repository.deleteAddress('address-id-1'))
-          .thenAnswer((_) async => const Right(null));
+      when(
+        () => repository.deleteAddress('address-id-1'),
+      ).thenAnswer((_) async => const Right(null));
       when(repository.loadAddresses).thenAnswer((_) async => const Right([]));
       return buildBloc();
     },

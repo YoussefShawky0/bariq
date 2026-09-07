@@ -18,8 +18,9 @@ void main() {
   });
 
   test('returns the destination supplied by the repository', () async {
-    when(repository.resolveInitialDestination)
-        .thenAnswer((_) async => const Right(AppDestination.onboarding));
+    when(
+      repository.resolveInitialDestination,
+    ).thenAnswer((_) async => const Right(AppDestination.onboarding));
 
     final result = await useCase();
 
@@ -31,8 +32,9 @@ void main() {
   });
 
   test('returns the failure supplied by the repository', () async {
-    when(repository.resolveInitialDestination)
-        .thenAnswer((_) async => const Left(CacheFailure()));
+    when(
+      repository.resolveInitialDestination,
+    ).thenAnswer((_) async => const Left(CacheFailure()));
 
     final result = await useCase();
 
