@@ -4,9 +4,6 @@ import 'package:bariq/core/theme/app_sizes.dart';
 import 'package:bariq/core/theme/app_theme.dart';
 import 'package:bariq/features/home/presentation/pages/home_page.dart';
 import 'package:bariq/features/service_catalog/domain/repositories/service_catalog_repository.dart';
-import 'package:bariq/features/service_catalog/domain/usecases/load_service_detail.dart';
-import 'package:bariq/features/service_catalog/domain/usecases/load_services.dart';
-import 'package:bariq/features/service_catalog/presentation/cubit/service_catalog_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,15 +20,15 @@ void main() {
 
   setUp(() async {
     repository = MockServiceCatalogRepository();
-    await configureDependencies(
-      serviceCatalogRepository: repository,
-    );
+    await configureDependencies(serviceCatalogRepository: repository);
   });
 
-  testWidgets('renders featured banner and service catalog on home page',
-      (tester) async {
-    when(repository.loadServices)
-        .thenAnswer((_) async => Right([testService()]));
+  testWidgets('renders featured banner and service catalog on home page', (
+    tester,
+  ) async {
+    when(
+      repository.loadServices,
+    ).thenAnswer((_) async => Right([testService()]));
 
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = AppSizes.designSize;
