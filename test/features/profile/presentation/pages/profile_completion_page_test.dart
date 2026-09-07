@@ -37,9 +37,8 @@ void main() {
 
   setUp(() {
     repository = MockProfileRepository();
-    when(
-      repository.loadCurrentProfile,
-    ).thenAnswer((_) async => Right(customerProfile()));
+    when(repository.loadCurrentProfile)
+        .thenAnswer((_) async => Right(customerProfile()));
     bloc = ProfileBloc(
       LoadCustomerProfile(repository),
       SaveCustomerProfile(repository),

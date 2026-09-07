@@ -48,9 +48,8 @@ void main() {
 
   testWidgets('adds the first vehicle and refreshes the list', (tester) async {
     when(repository.loadVehicles).thenAnswer((_) async => const Right([]));
-    when(
-      () => repository.saveVehicle(any()),
-    ).thenAnswer((_) async => Right(vehicle()));
+    when(() => repository.saveVehicle(any()))
+        .thenAnswer((_) async => Right(vehicle()));
     await _pumpPage(tester, bloc);
 
     await tester.tap(find.widgetWithText(FilledButton, AppStrings.addVehicle));

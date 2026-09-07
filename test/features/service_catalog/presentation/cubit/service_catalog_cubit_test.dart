@@ -32,10 +32,7 @@ void main() {
         return buildCubit();
       },
       act: (cubit) => cubit.load(),
-      expect: () => [
-        isA<ServiceCatalogLoading>(),
-        isA<ServiceCatalogReady>(),
-      ],
+      expect: () => [isA<ServiceCatalogLoading>(), isA<ServiceCatalogReady>()],
     );
 
     blocTest<ServiceCatalogCubit, ServiceCatalogState>(
@@ -65,10 +62,7 @@ void main() {
         return buildDetailCubit();
       },
       act: (cubit) => cubit.load('service-1'),
-      expect: () => [
-        isA<ServiceDetailLoading>(),
-        isA<ServiceDetailReady>(),
-      ],
+      expect: () => [isA<ServiceDetailLoading>(), isA<ServiceDetailReady>()],
     );
   });
 }

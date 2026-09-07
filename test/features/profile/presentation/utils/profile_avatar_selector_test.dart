@@ -33,9 +33,8 @@ void main() {
     ).thenAnswer((_) async => pickedFile);
     when(() => cropper.crop(pickedFile)).thenAnswer((_) async => croppedFile);
     when(() => croppedFile.name).thenReturn('avatar.jpg');
-    when(
-      () => croppedFile.readAsBytes(),
-    ).thenAnswer((_) async => Uint8List.fromList([1, 2, 3]));
+    when(() => croppedFile.readAsBytes())
+        .thenAnswer((_) async => Uint8List.fromList([1, 2, 3]));
   });
 
   test('crops a selected image before preparing the upload payload', () async {

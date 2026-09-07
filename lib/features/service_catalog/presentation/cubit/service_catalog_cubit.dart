@@ -11,7 +11,7 @@ part 'service_catalog_cubit.freezed.dart';
 /// Cubit for the service catalog list (read-only, no complex events).
 class ServiceCatalogCubit extends Cubit<ServiceCatalogState> {
   ServiceCatalogCubit(this._loadServices)
-      : super(const ServiceCatalogState.initial());
+    : super(const ServiceCatalogState.initial());
 
   final LoadServices _loadServices;
 
@@ -38,7 +38,7 @@ sealed class ServiceCatalogState with _$ServiceCatalogState {
 /// Cubit for a single service detail page.
 class ServiceDetailCubit extends Cubit<ServiceDetailState> {
   ServiceDetailCubit(this._loadServiceDetail)
-      : super(const ServiceDetailState.initial());
+    : super(const ServiceDetailState.initial());
 
   final LoadServiceDetail _loadServiceDetail;
 

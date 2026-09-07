@@ -46,9 +46,8 @@ void main() {
 
   testWidgets('completes onboarding from the final screen', (tester) async {
     var completionCalls = 0;
-    when(
-      repository.completeOnboarding,
-    ).thenAnswer((_) async => const Right(unit));
+    when(repository.completeOnboarding)
+        .thenAnswer((_) async => const Right(unit));
     await _pumpOnboarding(
       tester,
       repository: repository,
@@ -67,9 +66,8 @@ void main() {
 
   testWidgets('skips onboarding from the first screen', (tester) async {
     var completionCalls = 0;
-    when(
-      repository.completeOnboarding,
-    ).thenAnswer((_) async => const Right(unit));
+    when(repository.completeOnboarding)
+        .thenAnswer((_) async => const Right(unit));
     await _pumpOnboarding(
       tester,
       repository: repository,
@@ -83,9 +81,8 @@ void main() {
   });
 
   testWidgets('shows retry when persistence fails', (tester) async {
-    when(
-      repository.completeOnboarding,
-    ).thenAnswer((_) async => const Left(CacheFailure()));
+    when(repository.completeOnboarding)
+        .thenAnswer((_) async => const Left(CacheFailure()));
     await _pumpOnboarding(tester, repository: repository);
 
     await tester.tap(find.text(AppStrings.skip));

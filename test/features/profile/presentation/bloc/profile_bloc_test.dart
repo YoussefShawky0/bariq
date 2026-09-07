@@ -40,9 +40,8 @@ void main() {
   blocTest<ProfileBloc, ProfileState>(
     'loads an empty or existing customer profile',
     build: () {
-      when(
-        repository.loadCurrentProfile,
-      ).thenAnswer((_) async => Right(customerProfile()));
+      when(repository.loadCurrentProfile)
+          .thenAnswer((_) async => Right(customerProfile()));
       return buildBloc();
     },
     act: (bloc) => bloc.add(const ProfileEvent.started()),
@@ -52,9 +51,8 @@ void main() {
   blocTest<ProfileBloc, ProfileState>(
     'preserves a safe load failure state',
     build: () {
-      when(
-        repository.loadCurrentProfile,
-      ).thenAnswer((_) async => const Left(NetworkFailure()));
+      when(repository.loadCurrentProfile)
+          .thenAnswer((_) async => const Left(NetworkFailure()));
       return buildBloc();
     },
     act: (bloc) => bloc.add(const ProfileEvent.started()),

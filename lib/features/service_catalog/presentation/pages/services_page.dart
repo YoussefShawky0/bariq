@@ -18,9 +18,7 @@ class ServicesPage extends StatelessWidget {
     return BlocProvider<ServiceCatalogCubit>(
       create: (_) => getIt<ServiceCatalogCubit>()..load(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(AppStrings.servicesTitle),
-        ),
+        appBar: AppBar(title: const Text(AppStrings.servicesTitle)),
         body: SafeArea(
           child: BlocBuilder<ServiceCatalogCubit, ServiceCatalogState>(
             builder: (context, state) {
@@ -37,9 +35,8 @@ class ServicesPage extends StatelessWidget {
                       SizedBox(height: AppSpacing.fieldGap),
                   itemBuilder: (context, index) => HomeServiceCard(
                     service: services[index],
-                    onTap: () => context.go(
-                      AppRoutes.serviceDetail(services[index].id),
-                    ),
+                    onTap: () =>
+                        context.go(AppRoutes.serviceDetail(services[index].id)),
                   ),
                 ),
                 failure: (failure) => Center(

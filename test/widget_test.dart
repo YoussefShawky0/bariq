@@ -62,9 +62,8 @@ void main() {
     profileRepository = MockProfileRepository();
     vehicleRepository = MockVehicleRepository();
     when(authRepository.watchSession).thenAnswer((_) => const Stream.empty());
-    when(
-      vehicleRepository.loadVehicles,
-    ).thenAnswer((_) async => const Right([]));
+    when(vehicleRepository.loadVehicles)
+        .thenAnswer((_) async => const Right([]));
     cubit = AppStartupCubit(ResolveInitialDestination(repository));
   });
 
@@ -73,9 +72,8 @@ void main() {
   });
 
   testWidgets('renders the resolved app startup destination', (tester) async {
-    when(
-      repository.resolveInitialDestination,
-    ).thenAnswer((_) async => const Right(AppDestination.onboarding));
+    when(repository.resolveInitialDestination)
+        .thenAnswer((_) async => const Right(AppDestination.onboarding));
 
     await tester.pumpWidget(
       _TestApp(
@@ -96,9 +94,8 @@ void main() {
   });
 
   testWidgets('renders a retry action when app startup fails', (tester) async {
-    when(
-      repository.resolveInitialDestination,
-    ).thenAnswer((_) async => const Left(CacheFailure()));
+    when(repository.resolveInitialDestination)
+        .thenAnswer((_) async => const Left(CacheFailure()));
 
     await tester.pumpWidget(
       _TestApp(
@@ -120,9 +117,8 @@ void main() {
   testWidgets('prioritizes a cold-start password recovery link', (
     tester,
   ) async {
-    when(
-      repository.resolveInitialDestination,
-    ).thenAnswer((_) async => const Right(AppDestination.home));
+    when(repository.resolveInitialDestination)
+        .thenAnswer((_) async => const Right(AppDestination.home));
     when(authRepository.watchSession).thenAnswer(
       (_) => Stream.value(const Right(AuthSessionStatus.passwordRecovery)),
     );
@@ -148,12 +144,10 @@ void main() {
   testWidgets('routes an authenticated incomplete customer to profile', (
     tester,
   ) async {
-    when(
-      repository.resolveInitialDestination,
-    ).thenAnswer((_) async => const Right(AppDestination.profileCompletion));
-    when(
-      profileRepository.loadCurrentProfile,
-    ).thenAnswer((_) async => Right(customerProfile()));
+    when(repository.resolveInitialDestination)
+        .thenAnswer((_) async => const Right(AppDestination.profileCompletion));
+    when(profileRepository.loadCurrentProfile)
+        .thenAnswer((_) async => Right(customerProfile()));
 
     await tester.pumpWidget(
       _TestApp(

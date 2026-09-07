@@ -34,9 +34,8 @@ void main() {
 
   test('save accepts minimum valid profile completion data', () async {
     final saved = customerProfile(fullName: 'يوسف شوقي', completed: true);
-    when(
-      () => repository.saveCurrentProfile(any()),
-    ).thenAnswer((_) async => Right(saved));
+    when(() => repository.saveCurrentProfile(any()))
+        .thenAnswer((_) async => Right(saved));
 
     final result = await SaveCustomerProfile(repository)(_input());
 

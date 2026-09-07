@@ -22,9 +22,8 @@ void main() {
   blocTest<AppStartupCubit, AppStartupState>(
     'emits loading then ready when resolution succeeds',
     setUp: () {
-      when(
-        repository.resolveInitialDestination,
-      ).thenAnswer((_) async => const Right(AppDestination.onboarding));
+      when(repository.resolveInitialDestination)
+          .thenAnswer((_) async => const Right(AppDestination.onboarding));
     },
     build: () => AppStartupCubit(useCase),
     act: (cubit) => cubit.initialize(),
@@ -37,9 +36,8 @@ void main() {
   blocTest<AppStartupCubit, AppStartupState>(
     'emits loading then failure when resolution fails',
     setUp: () {
-      when(
-        repository.resolveInitialDestination,
-      ).thenAnswer((_) async => const Left(CacheFailure()));
+      when(repository.resolveInitialDestination)
+          .thenAnswer((_) async => const Left(CacheFailure()));
     },
     build: () => AppStartupCubit(useCase),
     act: (cubit) => cubit.initialize(),

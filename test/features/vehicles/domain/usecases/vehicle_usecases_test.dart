@@ -29,9 +29,8 @@ void main() {
   });
 
   test('save trims and normalizes accepted input', () async {
-    when(
-      () => repository.saveVehicle(any()),
-    ).thenAnswer((_) async => Right(vehicle()));
+    when(() => repository.saveVehicle(any()))
+        .thenAnswer((_) async => Right(vehicle()));
 
     await SaveVehicle(repository, now: () => DateTime.utc(2026, 8, 5))(
       vehicleInput(
@@ -82,9 +81,8 @@ void main() {
   });
 
   test('delete delegates a valid id', () async {
-    when(
-      () => repository.deleteVehicle('vehicle-id'),
-    ).thenAnswer((_) async => const Right(unit));
+    when(() => repository.deleteVehicle('vehicle-id'))
+        .thenAnswer((_) async => const Right(unit));
 
     final result = await DeleteVehicle(repository)('vehicle-id');
 

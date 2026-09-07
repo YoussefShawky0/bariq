@@ -62,4 +62,3 @@ class _BariqAppState extends State<BariqApp> {
     );
   }
 }
-

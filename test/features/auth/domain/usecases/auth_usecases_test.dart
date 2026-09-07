@@ -117,9 +117,8 @@ void main() {
   });
 
   test('UpdatePassword validates confirmation and delegates', () async {
-    when(
-      () => repository.updatePassword('newPassword1'),
-    ).thenAnswer((_) async => const Right(AuthOutcome.authenticated));
+    when(() => repository.updatePassword('newPassword1'))
+        .thenAnswer((_) async => const Right(AuthOutcome.authenticated));
 
     final result = await UpdatePassword(repository)(
       password: 'newPassword1',

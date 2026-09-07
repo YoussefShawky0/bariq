@@ -105,11 +105,10 @@ void main() {
   blocTest<AuthBloc, AuthState>(
     'emits password-reset confirmation without exposing account existence',
     setUp: () {
-      when(
-        () => repository.requestPasswordReset('customer@example.com'),
-      ).thenAnswer(
-        (_) async => const Right(AuthOutcome.passwordResetRequested),
-      );
+      when(() => repository.requestPasswordReset('customer@example.com'))
+          .thenAnswer(
+            (_) async => const Right(AuthOutcome.passwordResetRequested),
+          );
     },
     build: buildBloc,
     act: (bloc) => bloc.add(
@@ -139,9 +138,8 @@ void main() {
   blocTest<AuthBloc, AuthState>(
     'shows recovery then authenticates after updating the password',
     setUp: () {
-      when(
-        () => repository.updatePassword('newPassword1'),
-      ).thenAnswer((_) async => const Right(AuthOutcome.authenticated));
+      when(() => repository.updatePassword('newPassword1'))
+          .thenAnswer((_) async => const Right(AuthOutcome.authenticated));
     },
     build: buildBloc,
     act: (bloc) async {

@@ -38,10 +38,7 @@ class HomeServiceCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    service.nameAr,
-                    style: AppTextStyles.vehicleName,
-                  ),
+                  Text(service.nameAr, style: AppTextStyles.vehicleName),
                   SizedBox(height: 4.h),
                   Text(
                     service.descriptionAr.isNotEmpty

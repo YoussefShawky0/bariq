@@ -69,9 +69,8 @@ void main() {
   test('returns profile completion for an incomplete customer', () async {
     when(localDataSource.isOnboardingCompleted).thenAnswer((_) async => true);
     when(sessionDataSource.currentUserId).thenReturn('customer-id');
-    when(
-      () => profileDataSource.hasCompletedProfile('customer-id'),
-    ).thenAnswer((_) async => false);
+    when(() => profileDataSource.hasCompletedProfile('customer-id'))
+        .thenAnswer((_) async => false);
 
     final result = await repository.resolveInitialDestination();
 
@@ -86,9 +85,8 @@ void main() {
     () async {
       when(localDataSource.isOnboardingCompleted).thenAnswer((_) async => true);
       when(sessionDataSource.currentUserId).thenReturn('customer-id');
-      when(
-        () => profileDataSource.hasCompletedProfile('customer-id'),
-      ).thenAnswer((_) async => true);
+      when(() => profileDataSource.hasCompletedProfile('customer-id'))
+          .thenAnswer((_) async => true);
 
       final result = await repository.resolveInitialDestination();
 
@@ -97,9 +95,8 @@ void main() {
   );
 
   test('maps cache exceptions to CacheFailure', () async {
-    when(
-      localDataSource.isOnboardingCompleted,
-    ).thenThrow(const CacheException('storage error'));
+    when(localDataSource.isOnboardingCompleted)
+        .thenThrow(const CacheException('storage error'));
 
     final result = await repository.resolveInitialDestination();
 

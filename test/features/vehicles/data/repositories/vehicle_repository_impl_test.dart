@@ -39,9 +39,8 @@ void main() {
   }
 
   test('maps remote vehicle models into domain entities', () async {
-    when(
-      remoteDataSource.loadVehicles,
-    ).thenAnswer((_) async => [vehicleModel()]);
+    when(remoteDataSource.loadVehicles)
+        .thenAnswer((_) async => [vehicleModel()]);
 
     final result = await repository.loadVehicles();
 
@@ -51,9 +50,8 @@ void main() {
   });
 
   test('maps a saved remote model into a domain entity', () async {
-    when(
-      () => remoteDataSource.saveVehicle(any()),
-    ).thenAnswer((_) async => vehicleModel());
+    when(() => remoteDataSource.saveVehicle(any()))
+        .thenAnswer((_) async => vehicleModel());
 
     final result = await repository.saveVehicle(vehicleInput());
 
@@ -84,9 +82,8 @@ void main() {
   });
 
   test('returns unit after remote deletion', () async {
-    when(
-      () => remoteDataSource.deleteVehicle('vehicle-id'),
-    ).thenAnswer((_) async {});
+    when(() => remoteDataSource.deleteVehicle('vehicle-id'))
+        .thenAnswer((_) async {});
 
     final result = await repository.deleteVehicle('vehicle-id');
 

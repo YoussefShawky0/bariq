@@ -26,9 +26,8 @@ void main() {
   testWidgets('renders featured banner and service catalog on home page', (
     tester,
   ) async {
-    when(
-      repository.loadServices,
-    ).thenAnswer((_) async => Right([testService()]));
+    when(repository.loadServices)
+        .thenAnswer((_) async => Right([testService()]));
 
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = AppSizes.designSize;

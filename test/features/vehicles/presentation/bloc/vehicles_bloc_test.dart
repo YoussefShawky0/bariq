@@ -39,9 +39,8 @@ void main() {
   blocTest<VehiclesBloc, VehiclesState>(
     'preserves a safe load failure state',
     build: () {
-      when(
-        repository.loadVehicles,
-      ).thenAnswer((_) async => const Left(NetworkFailure()));
+      when(repository.loadVehicles)
+          .thenAnswer((_) async => const Left(NetworkFailure()));
       return buildBloc();
     },
     act: (bloc) => bloc.add(const VehiclesEvent.started()),
@@ -51,9 +50,8 @@ void main() {
   blocTest<VehiclesBloc, VehiclesState>(
     'saves then reloads the server-authoritative list',
     build: () {
-      when(
-        () => repository.saveVehicle(any()),
-      ).thenAnswer((_) async => Right(vehicle()));
+      when(() => repository.saveVehicle(any()))
+          .thenAnswer((_) async => Right(vehicle()));
       when(repository.loadVehicles).thenAnswer((_) async => Right([vehicle()]));
       return buildBloc();
     },
@@ -75,9 +73,8 @@ void main() {
   blocTest<VehiclesBloc, VehiclesState>(
     'deletes then reloads the remaining vehicles',
     build: () {
-      when(
-        () => repository.deleteVehicle('vehicle-id'),
-      ).thenAnswer((_) async => const Right(unit));
+      when(() => repository.deleteVehicle('vehicle-id'))
+          .thenAnswer((_) async => const Right(unit));
       when(repository.loadVehicles).thenAnswer((_) async => const Right([]));
       return buildBloc();
     },

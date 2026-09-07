@@ -23,9 +23,7 @@ class ServiceDetailPage extends StatelessWidget {
     return BlocProvider<ServiceDetailCubit>(
       create: (_) => getIt<ServiceDetailCubit>()..load(serviceId),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(AppStrings.serviceDetailsTitle),
-        ),
+        appBar: AppBar(title: const Text(AppStrings.serviceDetailsTitle)),
         body: SafeArea(
           child: BlocBuilder<ServiceDetailCubit, ServiceDetailState>(
             builder: (context, state) {
@@ -89,7 +87,11 @@ class _ServiceDetailContent extends StatelessWidget {
                 style: AppTextStyles.helper.copyWith(color: AppColors.navy),
               ),
               SizedBox(width: 16.w),
-              Icon(Icons.water_drop_outlined, size: 18.r, color: AppColors.aqua),
+              Icon(
+                Icons.water_drop_outlined,
+                size: 18.r,
+                color: AppColors.aqua,
+              ),
               SizedBox(width: 6.w),
               Text(
                 AppStrings.noWaterRequired,
@@ -101,7 +103,10 @@ class _ServiceDetailContent extends StatelessWidget {
 
           // Description
           if (service.descriptionAr.isNotEmpty) ...[
-            Text(AppStrings.serviceInclusions, style: AppTextStyles.sectionTitle),
+            Text(
+              AppStrings.serviceInclusions,
+              style: AppTextStyles.sectionTitle,
+            ),
             SizedBox(height: AppSpacing.compact),
             Container(
               padding: EdgeInsets.all(AppSpacing.regular),
@@ -110,18 +115,17 @@ class _ServiceDetailContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppRadius.medium),
                 border: Border.all(color: AppColors.border),
               ),
-              child: Text(
-                service.descriptionAr,
-                style: AppTextStyles.body,
-              ),
+              child: Text(service.descriptionAr, style: AppTextStyles.body),
             ),
             SizedBox(height: AppSpacing.section),
           ],
 
           // Pricing per vehicle class
           if (detail.pricingConfigs.isNotEmpty) ...[
-            Text(AppStrings.serviceSelectVehicleClass,
-                style: AppTextStyles.sectionTitle),
+            Text(
+              AppStrings.serviceSelectVehicleClass,
+              style: AppTextStyles.sectionTitle,
+            ),
             SizedBox(height: AppSpacing.compact),
             ...detail.pricingConfigs.map((pricing) => _PricingRow(pricing)),
             SizedBox(height: AppSpacing.section),
@@ -213,7 +217,9 @@ class _AddonCard extends StatelessWidget {
               children: [
                 Text(
                   addon.nameAr,
-                  style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
+                  style: AppTextStyles.body.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 if (addon.descriptionAr.isNotEmpty) ...[
                   SizedBox(height: 2.h),

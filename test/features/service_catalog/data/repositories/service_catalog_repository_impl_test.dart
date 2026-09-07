@@ -64,8 +64,7 @@ void main() {
   });
 
   test('maps timeout to a network failure', () async {
-    when(remoteDataSource.fetchServices)
-        .thenThrow(TimeoutException('timeout'));
+    when(remoteDataSource.fetchServices).thenThrow(TimeoutException('timeout'));
     stubLogger();
 
     final result = await repository.loadServices();
