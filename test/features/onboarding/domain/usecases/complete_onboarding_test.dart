@@ -17,9 +17,8 @@ void main() {
   });
 
   test('returns success from the repository', () async {
-    when(
-      repository.completeOnboarding,
-    ).thenAnswer((_) async => const Right(unit));
+    when(repository.completeOnboarding)
+        .thenAnswer((_) async => const Right(unit));
 
     final result = await useCase();
 
@@ -28,9 +27,8 @@ void main() {
   });
 
   test('returns failure from the repository', () async {
-    when(
-      repository.completeOnboarding,
-    ).thenAnswer((_) async => const Left(CacheFailure()));
+    when(repository.completeOnboarding)
+        .thenAnswer((_) async => const Left(CacheFailure()));
 
     final result = await useCase();
 
