@@ -3,3 +3,15 @@ final class CacheException implements Exception {
 
   final Object cause;
 }
+
+final class BackendConfigurationException implements Exception {
+  const BackendConfigurationException();
+}
+
+final class ExternalAuthLaunchException implements Exception {
+  const ExternalAuthLaunchException();
+}
+
+final class UnauthenticatedException implements Exception {
+  const UnauthenticatedException();
+}

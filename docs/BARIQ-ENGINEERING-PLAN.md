@@ -1,6 +1,6 @@
 # BARIQ — Product & Engineering Master Plan
 
-> الإصدار: 1.1
+> الإصدار: 1.2
 > الحالة: Architecture Baseline  
 > اللغة الأساسية للواجهة: العربية RTL  
 > Figma mobile baseline: `390×844`  
@@ -28,6 +28,7 @@ BARIQ منصة تشغيل لخدمات غسيل وتلميع السيارات ف
 | State management | BLoC/Cubit + Freezed | state machines صريحة وقابلة للاختبار |
 | Functional errors | `fpdart.Either<Failure, T>` | مسار نجاح/فشل typed دون exceptions عبر الطبقات |
 | Backend | Supabase managed backend | أقل عبء تشغيل لمطور Flutter واحد مع Auth وData API وStorage وRealtime |
+| Customer authentication | Email/password + Google OAuth | لا تكلفة SMS لكل دخول، مع مسار دخول سريع ومسار بديل كامل |
 | Database | Supabase PostgreSQL + PostGIS | معاملات قوية واستعلامات نطاقات ومواقع |
 | Data access | Supabase Flutter SDK + SQL/RPC | وصول typed من الـData layer وعمليات حساسة داخل Postgres/Edge Functions |
 | Jobs | Supabase Cron/Queues عند حاجة مثبتة | retries وwebhooks والمهام المؤجلة بدون خادم دائم |
@@ -42,7 +43,8 @@ BARIQ منصة تشغيل لخدمات غسيل وتلميع السيارات ف
 
 ### داخل الـMVP
 
-- تسجيل/دخول برقم الهاتف وOTP.
+- تسجيل/دخول بالبريد وكلمة المرور أو `Continue with Google`.
+- تأكيد البريد واستعادة كلمة المرور باستخدام Supabase Auth.
 - Profile أساسي ووسائل تواصل.
 - سيارات محفوظة وعناوين محفوظة.
 - 3 خدمات أساسية حسب zone وvehicle class.
@@ -68,6 +70,7 @@ BARIQ منصة تشغيل لخدمات غسيل وتلميع السيارات ف
 - Multi-country/multi-currency.
 - AI damage detection.
 - Microservices.
+- رفع بطاقة العميل أو رخصته؛ الخدمة لا تحتاج مستندات هوية من العميل.
 
 ## 4. أسطح المنتج والشاشات
 
@@ -77,7 +80,8 @@ BARIQ منصة تشغيل لخدمات غسيل وتلميع السيارات ف
 |---|---|---|
 | App Startup | Native splash، app app startup، maintenance، force update | دخول آمن للحالة الصحيحة |
 | Onboarding | 3 شرائح قيمة المنتج، language، permissions context | فهم الخدمة قبل طلب الصلاحيات |
-| Auth | Phone، OTP، resend timer، profile setup | هوية موثقة |
+| Auth | Login، sign up، forgot password، email verification، Continue with Google | هوية موثقة دون SMS مدفوع |
+| Profile Completion | full name، phone، city/area، optional avatar، terms acceptance | أقل بيانات لازمة قبل الاستخدام |
 | Home | greeting، saved location، services، active booking، recent vehicles | نقطة بداية واضحة |
 | Services | list، details، inclusions، duration، starting price | اختيار واعٍ |
 | Vehicles | list، add/edit، make/model/year/color/plate/class، default | تسعير وتنفيذ صحيح |
@@ -89,13 +93,13 @@ BARIQ منصة تشغيل لخدمات غسيل وتلميع السيارات ف
 | Notifications | operational inbox + deep links | الرجوع للحدث الصحيح |
 | Support | FAQ، contact، complaint/incident، attachments | حل المشاكل |
 | Rating | stars، tags، comment، issue escalation | feedback قابل للتشغيل |
-| Profile | personal data، vehicles، addresses، payment preferences، language، privacy، logout | إدارة الحساب |
+| Profile | personal data، vehicles، addresses، payment preferences، language، privacy، logout | إدارة الحساب دون مستندات هوية للعميل |
 
 ### 4.2 Technician App
 
 | المجموعة | الشاشات |
 |---|---|
-| Access | phone/OTP، pending approval، suspended state |
+| Access | email/password، admin approval، pending approval، suspended state |
 | Work status | shift، online/offline، zone |
 | Offers | incoming offer، countdown، accept/reject، offer details |
 | Job | route، customer-safe contact، readiness notes، arrival action |
@@ -123,34 +127,49 @@ BARIQ منصة تشغيل لخدمات غسيل وتلميع السيارات ف
 
 ```mermaid
 flowchart LR
-    A["Splash / App Startup"] --> B{"Authenticated?"}
+    A["Splash / App Startup"] --> B{"Onboarding completed?"}
     B -- "No" --> C["Onboarding"]
-    C --> D["Phone + OTP"]
-    D --> E["Profile setup"]
-    B -- "Yes" --> F["Home"]
-    E --> F
-    F --> G["Select vehicle"]
-    G --> H["Select service + add-ons"]
-    H --> I["Select address + readiness"]
-    I --> J["Fetch available slots"]
-    J --> K["Select payment"]
-    K --> L["Review booking"]
-    L --> M{"Payment method"}
-    M -- "Cash" --> N["Confirmed"]
-    M -- "Paymob" --> O["Pending payment"]
-    O --> P{"Verified webhook"}
-    P -- "Success" --> N
-    P -- "Failure/timeout" --> Q["Payment failed"]
-    N --> R["Dispatch"]
-    R --> S["Assigned"]
-    S --> T["En route + tracking"]
-    T --> U["Arrival PIN"]
-    U --> V["Before evidence"]
-    V --> W["In service"]
-    W --> X["After evidence + quality"]
-    X --> Y["Completed"]
-    Y --> Z["Rating / Support"]
+    B -- "Yes" --> D{"Authenticated?"}
+    C --> E["Login / Sign Up"]
+    D -- "No" --> E
+    E --> F["Email + Password"]
+    E --> G["Continue with Google"]
+    F --> H["Email verification"]
+    G --> I{"Profile complete?"}
+    H --> I
+    D -- "Yes" --> I
+    I -- "No" --> J["Profile completion"]
+    I -- "Yes" --> K["Home"]
+    J --> K
+    K --> L{"Booking data complete?"}
+    L -- "No" --> M["Phone + vehicle + address"]
+    L -- "Yes" --> N["Select vehicle"]
+    M --> N
+    N --> O["Select service + add-ons"]
+    O --> P["Select address + readiness"]
+    P --> Q["Fetch available slots"]
+    Q --> R["Select payment"]
+    R --> S["Review booking"]
+    S --> T{"Payment method"}
+    T -- "Cash" --> U["Confirmed"]
+    T -- "Paymob" --> V["Pending payment"]
+    V --> W{"Verified webhook"}
+    W -- "Success" --> U
+    W -- "Failure/timeout" --> X["Payment failed"]
+    U --> Y["Dispatch"]
+    Y --> Z["Assigned → service → completion → rating"]
 ```
+
+### 5.1 Customer Identity and Profile Rules
+
+- زر Google يحمل النص نفسه `Continue with Google` في login وsign up؛ Supabase يحدد هل الهوية جديدة أو موجودة.
+- `full_name` مطلوب عند استكمال البروفايل.
+- `phone` مطلوب قبل أول حجز للتواصل التشغيلي، لكنه لا يعرض كرقم موثّق ما دام لا يوجد SMS verification.
+- `avatar`, `preferred_language` اختياريان، بينما `city` و`area` مطلوبان قبل أول حجز.
+- السيارات والعناوين كيانات مستقلة، ولا نحشرها في نموذج إنشاء الحساب.
+- لا نطلب بطاقة شخصية أو رخصة قيادة أو رخصة سيارة من العميل في التسجيل أو البروفايل.
+- رقم لوحة السيارة يستخدم للتعرّف التشغيلي عليها، وصورة السيارة اختيارية.
+- مستندات الفني — إن ثبتت الحاجة التشغيلية أو القانونية لاحقًا — تكون في flow منفصل وStorage خاص بسياسات وصول واحتفاظ وحذف صريحة.
 
 ## 6. System Context
 
@@ -675,14 +694,15 @@ stateDiagram-v2
 
 | الخطر | التحكم |
 |---|---|
-| OTP abuse | rate limit، attempt limit، expiry، device/IP signals |
+| Auth abuse | Supabase rate limits، email verification، generic errors، provider protections |
 | Broken object authorization | resource ownership/role checks في service layer |
 | Payment spoofing | HMAC verification، amount/reference check، idempotency |
 | Duplicate booking/payment | Idempotency-Key + DB constraints |
 | Evidence leakage | signed URLs قصيرة العمر وauthorization قبل الإصدار |
 | Location misuse | lifecycle-limited collection + TTL + audit |
 | Secret exposure | environment/secret manager، `.env` ignored |
-| PII in logs | structured redaction، no OTP/token/location payloads |
+| PII in logs | structured redaction، no password/token/location/document payloads |
+| Unnecessary identity documents | data minimization؛ لا بطاقة أو رخصة للعميل في الـMVP |
 | Admin misuse | RBAC، audit log، step-up auth للrefund/sensitive actions |
 | Race conditions | transactions، row locks، optimistic version |
 
@@ -746,7 +766,7 @@ flowchart TB
 - Structured logs داخل Edge Functions مع `traceId`, `userId` masked، `bookingId`.
 - Metrics: function latency/error rate، queue depth/age، webhook failures، dispatch time، completion SLA، Realtime connections.
 - تتبع flow عبر Edge Function → PostgreSQL → provider مع correlation IDs.
-- Alerts: payment webhook failures، queue backlog، dispatch OPS_REVIEW spike، DB saturation، elevated OTP failures.
+- Alerts: payment webhook failures، queue backlog، dispatch OPS_REVIEW spike، DB saturation، elevated auth failures.
 - Business dashboard: conversion، slot utilization، acceptance، on-time arrival، completion، cancellation، rating، repeat rate.
 
 ## 22. Git and Delivery Flow
@@ -765,7 +785,7 @@ gitGraph
     merge feature/app-startup-foundation id: "PR reviewed"
     branch feature/auth
     checkout feature/auth
-    commit id: "feat: add otp flow"
+    commit id: "feat: add email and Google auth"
     checkout develop
     merge feature/auth id: "PR reviewed"
     checkout main
@@ -774,7 +794,7 @@ gitGraph
 
 Conventional Commits:
 
-- `feat(auth): add otp verification flow`
+- `feat(auth): add email and Google authentication flow`
 - `fix(booking): prevent duplicate slot submission`
 - `test(payments): cover repeated webhook`
 - `refactor(core): unify failure mapping`
@@ -799,8 +819,9 @@ Branch: `chore/foundation-hard-rules`
 
 ### Phase 1 — Identity & Profile
 
-- onboarding، phone/OTP، session app startup.
-- profile setup/edit.
+- onboarding، email/password، Google OAuth، session app startup.
+- email verification، forgot password، profile completion/edit.
+- phone required before first booking without SMS verification.
 - secure token storage.
 - tests وAPI contracts.
 

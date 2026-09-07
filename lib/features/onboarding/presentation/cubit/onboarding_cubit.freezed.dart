@@ -188,7 +188,7 @@ return failure(_that.currentPage,_that.failure);case _:
 
 class OnboardingViewing extends OnboardingState {
   const OnboardingViewing({required this.currentPage}): super._();
-
+  
 
  final  int currentPage;
 
@@ -254,7 +254,7 @@ as int,
 
 class OnboardingSaving extends OnboardingState {
   const OnboardingSaving({required this.currentPage}): super._();
-
+  
 
  final  int currentPage;
 
@@ -320,7 +320,7 @@ as int,
 
 class OnboardingCompleted extends OnboardingState {
   const OnboardingCompleted(): super._();
-
+  
 
 
 
@@ -352,7 +352,7 @@ String toString() {
 
 class OnboardingFailure extends OnboardingState {
   const OnboardingFailure({required this.currentPage, required this.failure}): super._();
-
+  
 
  final  int currentPage;
  final  Failure failure;
