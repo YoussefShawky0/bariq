@@ -125,8 +125,7 @@ void main() {
   });
 
   test('loads serviceable zones', () async {
-    when(remoteDataSource.fetchZones)
-        .thenAnswer((_) async => [testZone()]);
+    when(remoteDataSource.fetchZones).thenAnswer((_) async => [testZone()]);
 
     final result = await repository.loadZones();
 

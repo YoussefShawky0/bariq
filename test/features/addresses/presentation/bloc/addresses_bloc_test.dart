@@ -21,16 +21,15 @@ void main() {
 
   setUp(() {
     repository = MockAddressRepository();
-    when(repository.loadZones)
-        .thenAnswer((_) async => Right([testZone()]));
+    when(repository.loadZones).thenAnswer((_) async => Right([testZone()]));
   });
 
   AddressesBloc buildBloc() => AddressesBloc(
-        LoadAddresses(repository),
-        SaveAddress(repository),
-        DeleteAddress(repository),
-        LoadZones(repository),
-      );
+    LoadAddresses(repository),
+    SaveAddress(repository),
+    DeleteAddress(repository),
+    LoadZones(repository),
+  );
 
   blocTest<AddressesBloc, AddressesState>(
     'loads the current customer addresses and zones',
@@ -74,8 +73,7 @@ void main() {
     build: () {
       when(() => repository.deleteAddress('address-id-1'))
           .thenAnswer((_) async => const Right(null));
-      when(repository.loadAddresses)
-          .thenAnswer((_) async => const Right([]));
+      when(repository.loadAddresses).thenAnswer((_) async => const Right([]));
       return buildBloc();
     },
     seed: () => AddressesState.ready([testAddress()]),

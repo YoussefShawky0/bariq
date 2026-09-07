@@ -30,13 +30,13 @@ final class AddressRepositoryImpl implements AddressRepository {
 
   @override
   ResultFuture<Address> saveAddress(AddressInput input) => _guard(() {
-        final userId = _supabaseClient?.auth.currentUser?.id;
-        if (userId == null) throw const UnauthenticatedException();
-        if (input.isUpdate) {
-          return _remoteDataSource.updateAddress(input);
-        }
-        return _remoteDataSource.insertAddress(input, userId);
-      });
+    final userId = _supabaseClient?.auth.currentUser?.id;
+    if (userId == null) throw const UnauthenticatedException();
+    if (input.isUpdate) {
+      return _remoteDataSource.updateAddress(input);
+    }
+    return _remoteDataSource.insertAddress(input, userId);
+  });
 
   @override
   ResultFuture<void> deleteAddress(String addressId) =>

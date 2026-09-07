@@ -59,9 +59,9 @@ class AddressReadiness {
   final bool hasPermission;
 
   Map<String, dynamic> toJson() => {
-        'has_access': hasAccess,
-        'has_vehicle_space': hasVehicleSpace,
-        'no_water_needed': noWaterNeeded,
-        'has_permission': hasPermission,
-      };
+    'has_access': hasAccess,
+    'has_vehicle_space': hasVehicleSpace,
+    'no_water_needed': noWaterNeeded,
+    'has_permission': hasPermission,
+  };
 }

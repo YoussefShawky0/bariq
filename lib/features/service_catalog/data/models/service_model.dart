@@ -35,14 +35,14 @@ class ServiceAddonModel {
   const ServiceAddonModel._();
 
   static ServiceAddon fromJson(Map<String, dynamic> json) => ServiceAddon(
-        id: json['id'] as String,
-        serviceId: json['service_id'] as String,
-        nameAr: json['name_ar'] as String,
-        nameEn: json['name_en'] as String,
-        descriptionAr: json['description_ar'] as String? ?? '',
-        priceMinor: json['price_minor'] as int,
-        durationMinutes: json['duration_minutes'] as int? ?? 0,
-      );
+    id: json['id'] as String,
+    serviceId: json['service_id'] as String,
+    nameAr: json['name_ar'] as String,
+    nameEn: json['name_en'] as String,
+    descriptionAr: json['description_ar'] as String? ?? '',
+    priceMinor: json['price_minor'] as int,
+    durationMinutes: json['duration_minutes'] as int? ?? 0,
+  );
 }
 
 /// Maps Supabase JSON to [ServicePricing] entity.
@@ -50,10 +50,10 @@ class ServicePricingModel {
   const ServicePricingModel._();
 
   static ServicePricing fromJson(Map<String, dynamic> json) => ServicePricing(
-        serviceId: json['service_id'] as String,
-        zoneId: json['zone_id'] as String,
-        vehicleClass: json['vehicle_class'] as String,
-        priceMinor: json['price_minor'] as int,
-        durationMinutes: json['duration_minutes'] as int,
-      );
+    serviceId: json['service_id'] as String,
+    zoneId: json['zone_id'] as String,
+    vehicleClass: json['vehicle_class'] as String,
+    priceMinor: json['price_minor'] as int,
+    durationMinutes: json['duration_minutes'] as int,
+  );
 }

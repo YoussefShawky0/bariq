@@ -55,8 +55,9 @@ class AddressesPage extends StatelessWidget {
             Text(AppStrings.addressesLoadFailed, style: AppTextStyles.body),
             SizedBox(height: AppSpacing.regular),
             FilledButton(
-              onPressed: () =>
-                  context.read<AddressesBloc>().add(const AddressesEvent.started()),
+              onPressed: () => context.read<AddressesBloc>().add(
+                const AddressesEvent.started(),
+              ),
               child: const Text(AppStrings.retry),
             ),
           ],
@@ -88,20 +89,18 @@ class AddressesPage extends StatelessWidget {
   }
 
   bool _canMutate(AddressesState state) => state.maybeWhen(
-        ready: (_) => true,
-        success: (_, _) => true,
-        failure: (_, _, _) => true,
-        orElse: () => false,
-      );
+    ready: (_) => true,
+    success: (_, _) => true,
+    failure: (_, _, _) => true,
+    orElse: () => false,
+  );
 
   void _openAddressForm(BuildContext context) {
     final bloc = context.read<AddressesBloc>();
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => BlocProvider.value(
-          value: bloc,
-          child: const AddressFormPage(),
-        ),
+        builder: (_) =>
+            BlocProvider.value(value: bloc, child: const AddressFormPage()),
       ),
     );
   }
@@ -122,14 +121,23 @@ class _AddressList extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.location_off_rounded,
-                  size: 64.r, color: AppColors.dotInactive),
+              Icon(
+                Icons.location_off_rounded,
+                size: 64.r,
+                color: AppColors.dotInactive,
+              ),
               SizedBox(height: AppSpacing.regular),
-              Text(AppStrings.emptyAddressesTitle,
-                  style: AppTextStyles.title, textAlign: TextAlign.center),
+              Text(
+                AppStrings.emptyAddressesTitle,
+                style: AppTextStyles.title,
+                textAlign: TextAlign.center,
+              ),
               SizedBox(height: AppSpacing.compact),
-              Text(AppStrings.emptyAddressesBody,
-                  style: AppTextStyles.body, textAlign: TextAlign.center),
+              Text(
+                AppStrings.emptyAddressesBody,
+                style: AppTextStyles.body,
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
         ),
@@ -186,8 +194,10 @@ class _AddressCard extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(address.label,
-                          style: AppTextStyles.vehicleName),
+                      child: Text(
+                        address.label,
+                        style: AppTextStyles.vehicleName,
+                      ),
                     ),
                     if (address.isDefault)
                       Container(
@@ -199,8 +209,10 @@ class _AddressCard extends StatelessWidget {
                           color: AppColors.aquaSurface,
                           borderRadius: BorderRadius.circular(6.r),
                         ),
-                        child: Text(AppStrings.defaultAddress,
-                            style: AppTextStyles.vehicleBadge),
+                        child: Text(
+                          AppStrings.defaultAddress,
+                          style: AppTextStyles.vehicleBadge,
+                        ),
                       ),
                   ],
                 ),
@@ -215,7 +227,11 @@ class _AddressCard extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.delete_outline, color: AppColors.error, size: 20.r),
+            icon: Icon(
+              Icons.delete_outline,
+              color: AppColors.error,
+              size: 20.r,
+            ),
             onPressed: () => _confirmDelete(context),
           ),
         ],
@@ -237,9 +253,9 @@ class _AddressCard extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              context
-                  .read<AddressesBloc>()
-                  .add(AddressesEvent.deleteConfirmed(address.id));
+              context.read<AddressesBloc>().add(
+                AddressesEvent.deleteConfirmed(address.id),
+              );
             },
             child: const Text(
               AppStrings.deleteAddress,

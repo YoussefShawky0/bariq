@@ -82,9 +82,8 @@ class _AddressFormPageState extends State<AddressFormPage> {
           },
           failure: (_, failure, mutation) {
             if (mutation == AddressMutation.save) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(failure.message)),
-              );
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(failure.message)));
             }
           },
         );
@@ -123,10 +122,12 @@ class _AddressFormPageState extends State<AddressFormPage> {
                       labelText: AppStrings.addressZone,
                     ),
                     items: zones
-                        .map((z) => DropdownMenuItem(
-                              value: z.id,
-                              child: Text(z.nameAr),
-                            ))
+                        .map(
+                          (z) => DropdownMenuItem(
+                            value: z.id,
+                            child: Text(z.nameAr),
+                          ),
+                        )
                         .toList(),
                     onChanged: (v) => setState(() => _selectedZoneId = v),
                     validator: (v) =>
@@ -137,8 +138,9 @@ class _AddressFormPageState extends State<AddressFormPage> {
                   // Street.
                   TextFormField(
                     controller: _streetController,
-                    decoration:
-                        const InputDecoration(labelText: AppStrings.addressStreet),
+                    decoration: const InputDecoration(
+                      labelText: AppStrings.addressStreet,
+                    ),
                     validator: (v) =>
                         (v == null || v.trim().isEmpty) ? 'مطلوب' : null,
                   ),
@@ -151,7 +153,8 @@ class _AddressFormPageState extends State<AddressFormPage> {
                         child: TextFormField(
                           controller: _buildingController,
                           decoration: const InputDecoration(
-                              labelText: AppStrings.addressBuilding),
+                            labelText: AppStrings.addressBuilding,
+                          ),
                         ),
                       ),
                       SizedBox(width: AppSpacing.fieldGap),
@@ -159,7 +162,8 @@ class _AddressFormPageState extends State<AddressFormPage> {
                         child: TextFormField(
                           controller: _floorController,
                           decoration: const InputDecoration(
-                              labelText: AppStrings.addressFloor),
+                            labelText: AppStrings.addressFloor,
+                          ),
                         ),
                       ),
                       SizedBox(width: AppSpacing.fieldGap),
@@ -167,7 +171,8 @@ class _AddressFormPageState extends State<AddressFormPage> {
                         child: TextFormField(
                           controller: _apartmentController,
                           decoration: const InputDecoration(
-                              labelText: AppStrings.addressApartment),
+                            labelText: AppStrings.addressApartment,
+                          ),
                         ),
                       ),
                     ],
@@ -186,52 +191,58 @@ class _AddressFormPageState extends State<AddressFormPage> {
                   SizedBox(height: AppSpacing.section),
 
                   // Readiness checklist.
-                  Text(AppStrings.readinessTitle,
-                      style: AppTextStyles.sectionTitle),
+                  Text(
+                    AppStrings.readinessTitle,
+                    style: AppTextStyles.sectionTitle,
+                  ),
                   SizedBox(height: AppSpacing.compact),
                   _ReadinessToggle(
                     label: AppStrings.readinessWater,
                     value: _readiness.hasAccess,
-                    onChanged: (v) => setState(() => _readiness =
-                        AddressReadiness(
-                          hasAccess: v,
-                          hasVehicleSpace: _readiness.hasVehicleSpace,
-                          noWaterNeeded: _readiness.noWaterNeeded,
-                          hasPermission: _readiness.hasPermission,
-                        )),
+                    onChanged: (v) => setState(
+                      () => _readiness = AddressReadiness(
+                        hasAccess: v,
+                        hasVehicleSpace: _readiness.hasVehicleSpace,
+                        noWaterNeeded: _readiness.noWaterNeeded,
+                        hasPermission: _readiness.hasPermission,
+                      ),
+                    ),
                   ),
                   _ReadinessToggle(
                     label: AppStrings.readinessElectricity,
                     value: _readiness.hasVehicleSpace,
-                    onChanged: (v) => setState(() => _readiness =
-                        AddressReadiness(
-                          hasAccess: _readiness.hasAccess,
-                          hasVehicleSpace: v,
-                          noWaterNeeded: _readiness.noWaterNeeded,
-                          hasPermission: _readiness.hasPermission,
-                        )),
+                    onChanged: (v) => setState(
+                      () => _readiness = AddressReadiness(
+                        hasAccess: _readiness.hasAccess,
+                        hasVehicleSpace: v,
+                        noWaterNeeded: _readiness.noWaterNeeded,
+                        hasPermission: _readiness.hasPermission,
+                      ),
+                    ),
                   ),
                   _ReadinessToggle(
                     label: AppStrings.readinessSpace,
                     value: _readiness.noWaterNeeded,
-                    onChanged: (v) => setState(() => _readiness =
-                        AddressReadiness(
-                          hasAccess: _readiness.hasAccess,
-                          hasVehicleSpace: _readiness.hasVehicleSpace,
-                          noWaterNeeded: v,
-                          hasPermission: _readiness.hasPermission,
-                        )),
+                    onChanged: (v) => setState(
+                      () => _readiness = AddressReadiness(
+                        hasAccess: _readiness.hasAccess,
+                        hasVehicleSpace: _readiness.hasVehicleSpace,
+                        noWaterNeeded: v,
+                        hasPermission: _readiness.hasPermission,
+                      ),
+                    ),
                   ),
                   _ReadinessToggle(
                     label: AppStrings.readinessPermission,
                     value: _readiness.hasPermission,
-                    onChanged: (v) => setState(() => _readiness =
-                        AddressReadiness(
-                          hasAccess: _readiness.hasAccess,
-                          hasVehicleSpace: _readiness.hasVehicleSpace,
-                          noWaterNeeded: _readiness.noWaterNeeded,
-                          hasPermission: v,
-                        )),
+                    onChanged: (v) => setState(
+                      () => _readiness = AddressReadiness(
+                        hasAccess: _readiness.hasAccess,
+                        hasVehicleSpace: _readiness.hasVehicleSpace,
+                        noWaterNeeded: _readiness.noWaterNeeded,
+                        hasPermission: v,
+                      ),
+                    ),
                   ),
                   SizedBox(height: AppSpacing.section),
 

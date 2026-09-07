@@ -6,11 +6,11 @@ class ZoneModel {
   const ZoneModel._();
 
   static Zone fromJson(Map<String, dynamic> json) => Zone(
-        id: json['id'] as String,
-        code: json['code'] as String,
-        nameAr: json['name_ar'] as String,
-        nameEn: json['name_en'] as String,
-      );
+    id: json['id'] as String,
+    code: json['code'] as String,
+    nameAr: json['name_ar'] as String,
+    nameEn: json['name_en'] as String,
+  );
 }
 
 /// Maps Supabase JSON to [Address] entity and back.
@@ -48,19 +48,18 @@ class AddressModel {
     String? apartment,
     String? accessNotes,
     required AddressReadiness readiness,
-  }) =>
-      {
-        'customer_id': customerId,
-        'label': label,
-        'zone_id': zoneId,
-        'street': street,
-        'is_default': isDefault,
-        'building': ?building,
-        'floor': ?floor,
-        'apartment': ?apartment,
-        'access_notes': ?accessNotes,
-        'readiness': readiness.toJson(),
-      };
+  }) => {
+    'customer_id': customerId,
+    'label': label,
+    'zone_id': zoneId,
+    'street': street,
+    'is_default': isDefault,
+    'building': ?building,
+    'floor': ?floor,
+    'apartment': ?apartment,
+    'access_notes': ?accessNotes,
+    'readiness': readiness.toJson(),
+  };
 
   static Map<String, dynamic> toUpdateJson({
     required String label,
@@ -72,16 +71,15 @@ class AddressModel {
     String? apartment,
     String? accessNotes,
     required AddressReadiness readiness,
-  }) =>
-      {
-        'label': label,
-        'zone_id': zoneId,
-        'street': street,
-        'is_default': isDefault,
-        'building': building,
-        'floor': floor,
-        'apartment': apartment,
-        'access_notes': accessNotes,
-        'readiness': readiness.toJson(),
-      };
+  }) => {
+    'label': label,
+    'zone_id': zoneId,
+    'street': street,
+    'is_default': isDefault,
+    'building': building,
+    'floor': floor,
+    'apartment': apartment,
+    'access_notes': accessNotes,
+    'readiness': readiness.toJson(),
+  };
 }
