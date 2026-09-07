@@ -200,7 +200,7 @@ return sessionChanged(_that.result);case _:
 
 class AuthModeChanged implements AuthEvent {
   const AuthModeChanged(this.mode);
-
+  
 
  final  AuthMode mode;
 
@@ -266,7 +266,7 @@ as AuthMode,
 
 class AuthCredentialsSubmitted implements AuthEvent {
   const AuthCredentialsSubmitted({required this.email, required this.password, required this.passwordConfirmation});
-
+  
 
  final  String email;
  final  String password;
@@ -336,7 +336,7 @@ as String,
 
 class AuthPasswordResetRequested implements AuthEvent {
   const AuthPasswordResetRequested(this.email);
-
+  
 
  final  String email;
 
@@ -402,7 +402,7 @@ as String,
 
 class AuthPasswordUpdateSubmitted implements AuthEvent {
   const AuthPasswordUpdateSubmitted({required this.password, required this.passwordConfirmation});
-
+  
 
  final  String password;
  final  String passwordConfirmation;
@@ -470,7 +470,7 @@ as String,
 
 class AuthGoogleSubmitted implements AuthEvent {
   const AuthGoogleSubmitted();
-
+  
 
 
 
@@ -502,7 +502,7 @@ String toString() {
 
 class AuthSessionChanged implements AuthEvent {
   const AuthSessionChanged(this.result);
-
+  
 
  final  Either<Failure, AuthSessionStatus> result;
 
@@ -776,7 +776,7 @@ return failure(_that.mode,_that.failure);case _:
 
 class AuthReady implements AuthState {
   const AuthReady(this.mode);
-
+  
 
  final  AuthMode mode;
 
@@ -842,7 +842,7 @@ as AuthMode,
 
 class AuthSubmitting implements AuthState {
   const AuthSubmitting(this.mode);
-
+  
 
  final  AuthMode mode;
 
@@ -908,7 +908,7 @@ as AuthMode,
 
 class AuthEmailVerificationRequired implements AuthState {
   const AuthEmailVerificationRequired(this.email);
-
+  
 
  final  String email;
 
@@ -974,7 +974,7 @@ as String,
 
 class AuthPasswordResetSent implements AuthState {
   const AuthPasswordResetSent(this.email);
-
+  
 
  final  String email;
 
@@ -1040,7 +1040,7 @@ as String,
 
 class AuthPasswordRecovery implements AuthState {
   const AuthPasswordRecovery();
-
+  
 
 
 
@@ -1072,7 +1072,7 @@ String toString() {
 
 class AuthPasswordUpdating implements AuthState {
   const AuthPasswordUpdating();
-
+  
 
 
 
@@ -1104,7 +1104,7 @@ String toString() {
 
 class AuthPasswordUpdateFailure implements AuthState {
   const AuthPasswordUpdateFailure(this.failure);
-
+  
 
  final  Failure failure;
 
@@ -1170,7 +1170,7 @@ as Failure,
 
 class AuthOauthPending implements AuthState {
   const AuthOauthPending(this.mode);
-
+  
 
  final  AuthMode mode;
 
@@ -1236,7 +1236,7 @@ as AuthMode,
 
 class AuthAuthenticated implements AuthState {
   const AuthAuthenticated();
-
+  
 
 
 
@@ -1268,7 +1268,7 @@ String toString() {
 
 class AuthFailure implements AuthState {
   const AuthFailure(this.mode, this.failure);
-
+  
 
  final  AuthMode mode;
  final  Failure failure;
