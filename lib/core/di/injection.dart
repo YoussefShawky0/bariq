@@ -1,4 +1,12 @@
 import 'package:bariq/core/utils/app_logger.dart';
+import 'package:bariq/features/addresses/data/datasources/address_remote_data_source.dart';
+import 'package:bariq/features/addresses/data/repositories/address_repository_impl.dart';
+import 'package:bariq/features/addresses/domain/repositories/address_repository.dart';
+import 'package:bariq/features/addresses/domain/usecases/delete_address.dart';
+import 'package:bariq/features/addresses/domain/usecases/load_addresses.dart';
+import 'package:bariq/features/addresses/domain/usecases/load_zones.dart';
+import 'package:bariq/features/addresses/domain/usecases/save_address.dart';
+import 'package:bariq/features/addresses/presentation/bloc/addresses_bloc.dart';
 import 'package:bariq/features/app_startup/data/datasources/app_startup_local_data_source.dart';
 import 'package:bariq/features/app_startup/data/datasources/app_startup_profile_data_source.dart';
 import 'package:bariq/features/app_startup/data/datasources/app_startup_session_data_source.dart';
@@ -27,6 +35,12 @@ import 'package:bariq/features/profile/domain/repositories/profile_repository.da
 import 'package:bariq/features/profile/domain/usecases/load_customer_profile.dart';
 import 'package:bariq/features/profile/domain/usecases/save_customer_profile.dart';
 import 'package:bariq/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:bariq/features/service_catalog/data/datasources/service_catalog_remote_data_source.dart';
+import 'package:bariq/features/service_catalog/data/repositories/service_catalog_repository_impl.dart';
+import 'package:bariq/features/service_catalog/domain/repositories/service_catalog_repository.dart';
+import 'package:bariq/features/service_catalog/domain/usecases/load_service_detail.dart';
+import 'package:bariq/features/service_catalog/domain/usecases/load_services.dart';
+import 'package:bariq/features/service_catalog/presentation/cubit/service_catalog_cubit.dart';
 import 'package:bariq/features/vehicles/data/datasources/vehicle_remote_data_source.dart';
 import 'package:bariq/features/vehicles/data/repositories/vehicle_repository_impl.dart';
 import 'package:bariq/features/vehicles/domain/repositories/vehicle_repository.dart';
@@ -47,6 +61,8 @@ Future<void> configureDependencies({
   AuthRepository? authRepository,
   ProfileRepository? profileRepository,
   VehicleRepository? vehicleRepository,
+  AddressRepository? addressRepository,
+  ServiceCatalogRepository? serviceCatalogRepository,
   SupabaseClient? supabaseClient,
 }) async {
   if (getIt.isRegistered<AppStartupCubit>()) {
@@ -127,5 +143,32 @@ Future<void> configureDependencies({
     ..registerLazySingleton<DeleteVehicle>(() => DeleteVehicle(getIt()))
     ..registerFactory<VehiclesBloc>(
       () => VehiclesBloc(getIt(), getIt(), getIt()),
-    );
+    )
+    ..registerLazySingleton<AddressRemoteDataSource>(
+      () => SupabaseAddressRemoteDataSource(supabaseClient),
+    )
+    ..registerLazySingleton<AddressRepository>(
+      () =>
+          addressRepository ??
+          AddressRepositoryImpl(getIt(), getIt(), supabaseClient),
+    )
+    ..registerLazySingleton<LoadAddresses>(() => LoadAddresses(getIt()))
+    ..registerLazySingleton<SaveAddress>(() => SaveAddress(getIt()))
+    ..registerLazySingleton<DeleteAddress>(() => DeleteAddress(getIt()))
+    ..registerLazySingleton<LoadZones>(() => LoadZones(getIt()))
+    ..registerFactory<AddressesBloc>(
+      () => AddressesBloc(getIt(), getIt(), getIt(), getIt()),
+    )
+    ..registerLazySingleton<ServiceCatalogRemoteDataSource>(
+      () => SupabaseServiceCatalogRemoteDataSource(supabaseClient),
+    )
+    ..registerLazySingleton<ServiceCatalogRepository>(
+      () =>
+          serviceCatalogRepository ??
+          ServiceCatalogRepositoryImpl(getIt(), getIt()),
+    )
+    ..registerLazySingleton<LoadServices>(() => LoadServices(getIt()))
+    ..registerLazySingleton<LoadServiceDetail>(() => LoadServiceDetail(getIt()))
+    ..registerFactory<ServiceCatalogCubit>(() => ServiceCatalogCubit(getIt()))
+    ..registerFactory<ServiceDetailCubit>(() => ServiceDetailCubit(getIt()));
 }

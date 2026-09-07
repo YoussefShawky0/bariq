@@ -182,7 +182,7 @@ return deleteConfirmed(_that.id);case _:
 
 class VehiclesStarted implements VehiclesEvent {
   const VehiclesStarted();
-
+  
 
 
 
@@ -214,7 +214,7 @@ String toString() {
 
 class VehicleSubmitted implements VehiclesEvent {
   const VehicleSubmitted(this.input);
-
+  
 
  final  VehicleInput input;
 
@@ -280,7 +280,7 @@ as VehicleInput,
 
 class VehicleDeleteConfirmed implements VehiclesEvent {
   const VehicleDeleteConfirmed(this.id);
-
+  
 
  final  String id;
 
@@ -542,7 +542,7 @@ return failure(_that.vehicles,_that.failure,_that.mutation);case _:
 
 class VehiclesInitial implements VehiclesState {
   const VehiclesInitial();
-
+  
 
 
 
@@ -574,7 +574,7 @@ String toString() {
 
 class VehiclesLoading implements VehiclesState {
   const VehiclesLoading();
-
+  
 
 
 
@@ -606,7 +606,7 @@ String toString() {
 
 class VehiclesReady implements VehiclesState {
   const VehiclesReady(final  List<Vehicle> vehicles): _vehicles = vehicles;
-
+  
 
  final  List<Vehicle> _vehicles;
  List<Vehicle> get vehicles {
@@ -678,7 +678,7 @@ as List<Vehicle>,
 
 class VehiclesSaving implements VehiclesState {
   const VehiclesSaving(final  List<Vehicle> vehicles): _vehicles = vehicles;
-
+  
 
  final  List<Vehicle> _vehicles;
  List<Vehicle> get vehicles {
@@ -750,7 +750,7 @@ as List<Vehicle>,
 
 class VehiclesDeleting implements VehiclesState {
   const VehiclesDeleting(final  List<Vehicle> vehicles, this.vehicleId): _vehicles = vehicles;
-
+  
 
  final  List<Vehicle> _vehicles;
  List<Vehicle> get vehicles {
@@ -824,7 +824,7 @@ as String,
 
 class VehiclesSuccess implements VehiclesState {
   const VehiclesSuccess(final  List<Vehicle> vehicles, this.mutation): _vehicles = vehicles;
-
+  
 
  final  List<Vehicle> _vehicles;
  List<Vehicle> get vehicles {
@@ -898,7 +898,7 @@ as VehicleMutation,
 
 class VehiclesLoadFailure implements VehiclesState {
   const VehiclesLoadFailure(this.failure);
-
+  
 
  final  Failure failure;
 
@@ -964,7 +964,7 @@ as Failure,
 
 class VehiclesFailure implements VehiclesState {
   const VehiclesFailure(final  List<Vehicle> vehicles, this.failure, this.mutation): _vehicles = vehicles;
-
+  
 
  final  List<Vehicle> _vehicles;
  List<Vehicle> get vehicles {

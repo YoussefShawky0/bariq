@@ -148,6 +148,83 @@ abstract final class AppStrings {
   static String vehicleMeta(int year, String vehicleClass) =>
       '$year • $vehicleClass';
 
+  // ── Navigation ──
+  static const String navHome = 'الرئيسية';
+  static const String navVehicles = 'سياراتي';
+  static const String navBooking = 'الحجز';
+  static const String navAccount = 'حسابي';
+
+  // ── Home ──
+  static const String homeServicesTitle = 'الخدمات';
+  static const String homeViewAll = 'عرض الكل';
+  static const String homeBookNow = 'احجز الآن';
+  static const String homeFeaturedTag = 'الأكثر طلبًا';
+  static const String homeMinutesUnit = 'دقيقة';
+  static const String homeStartingFrom = 'يبدأ من';
+
+  static String homeGreeting(String name) => 'أهلًا، $name';
+  static String homePrice(int price) => '$price ج.م';
+  static String homeDuration(int minutes) => '$minutes دقيقة';
+
+  // ── Addresses ──
+  static const String addressesTab = 'العناوين';
+  static const String vehiclesTab = 'عربياتي';
+  static const String vehiclesAndAddressesTitle = 'العربيات والعناوين';
+  static const String vehiclesAndAddressesSubtitle = 'البيانات المحفوظة للحجز';
+  static const String addAddress = 'إضافة عنوان';
+  static const String editAddress = 'تعديل العنوان';
+  static const String emptyAddressesTitle = 'لسه مفيش عناوين مضافة';
+  static const String emptyAddressesBody =
+      'ضيف أول عنوان، وهيكون هو الاختيار الافتراضي في الحجز.';
+  static const String addressLabel = 'اسم مختصر *';
+  static const String addressLabelHint = 'مثال: البيت، الشغل';
+  static const String addressZone = 'المنطقة *';
+  static const String addressZoneHint = 'اختر المنطقة';
+  static const String addressStreet = 'الشارع *';
+  static const String addressBuilding = 'المبنى';
+  static const String addressFloor = 'الدور';
+  static const String addressApartment = 'الشقة';
+  static const String addressAccessNotes = 'ملاحظات للفني';
+  static const String addressAccessNotesHint =
+      'مثال: خاص بسيارة عند الباب الخلفي';
+  static const String defaultAddress = 'الافتراضي';
+  static const String makeDefaultAddress = 'استخدمه كعنواني الافتراضي';
+  static const String saveAddress = 'حفظ العنوان';
+  static const String deleteAddress = 'حذف';
+  static const String deleteAddressTitle = 'حذف العنوان؟';
+  static const String addressSaved = 'تم حفظ العنوان بنجاح.';
+  static const String addressDeleted = 'تم حذف العنوان.';
+  static const String addressesLoadFailed = 'تعذر تحميل العناوين.';
+
+  // ── Address readiness ──
+  static const String readinessTitle = 'تأكيد جاهزية المكان';
+  static const String readinessWater = 'تصريح دخول/بابي مفتاح';
+  static const String readinessElectricity = 'صنفرة أمة/دخول العربية';
+  static const String readinessSpace = 'الخدمة لا تحتاج مياه من المحل';
+  static const String readinessPermission = 'تصريح دخول/باب مفتاح';
+
+  static String deleteAddressBody(String label) =>
+      'هتحذف "$label" من حسابك. تقدر تضيفه من جديد لاحقًا.';
+
+  // ── Service Catalog ──
+  static const String servicesTitle = 'الخدمات';
+  static const String serviceDetailsTitle = 'تفاصيل الخدمة';
+  static const String serviceDuration = 'المدة';
+  static const String servicePrice = 'السعر';
+  static const String serviceInclusions = 'يشمل';
+  static const String serviceAddons = 'إضافات';
+  static const String serviceStartingPrice = 'يبدأ من';
+  static const String serviceSelectVehicleClass = 'حسب فئة العربية';
+  static const String servicesLoadFailed = 'تعذر تحميل الخدمات.';
+  static const String exteriorWash = 'غسيل خارجي';
+  static const String fullDetail = 'تلميع شامل';
+  static const String interiorClean = 'تنظيف داخلي';
+  static const String noWaterRequired = 'بدون مياه من المحل';
+  static const String perSession = 'لكل جلسة';
+
+  static String priceEGP(int price) => '$price ج.م';
+  static String durationMinutes(int minutes) => '$minutes دقيقة';
+
   static const Locale arabicLocale = Locale('ar');
   static const List<Locale> supportedLocales = [arabicLocale];
 }

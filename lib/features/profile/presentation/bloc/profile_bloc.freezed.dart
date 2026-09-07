@@ -176,7 +176,7 @@ return submitted(_that.fullName,_that.phone,_that.city,_that.area,_that.accepted
 
 class ProfileStarted implements ProfileEvent {
   const ProfileStarted();
-
+  
 
 
 
@@ -208,7 +208,7 @@ String toString() {
 
 class ProfileSubmitted implements ProfileEvent {
   const ProfileSubmitted({required this.fullName, required this.phone, required this.city, required this.area, required this.acceptedTerms, this.avatar});
-
+  
 
  final  String fullName;
  final  String phone;
@@ -474,7 +474,7 @@ return failure(_that.profile,_that.failure);case _:
 
 class ProfileInitial implements ProfileState {
   const ProfileInitial();
-
+  
 
 
 
@@ -506,7 +506,7 @@ String toString() {
 
 class ProfileLoading implements ProfileState {
   const ProfileLoading();
-
+  
 
 
 
@@ -538,7 +538,7 @@ String toString() {
 
 class ProfileReady implements ProfileState {
   const ProfileReady(this.profile);
-
+  
 
  final  CustomerProfile profile;
 
@@ -604,7 +604,7 @@ as CustomerProfile,
 
 class ProfileSubmitting implements ProfileState {
   const ProfileSubmitting(this.profile);
-
+  
 
  final  CustomerProfile profile;
 
@@ -670,7 +670,7 @@ as CustomerProfile,
 
 class ProfileCompleted implements ProfileState {
   const ProfileCompleted(this.profile);
-
+  
 
  final  CustomerProfile profile;
 
@@ -736,7 +736,7 @@ as CustomerProfile,
 
 class ProfileLoadFailure implements ProfileState {
   const ProfileLoadFailure(this.failure);
-
+  
 
  final  Failure failure;
 
@@ -802,7 +802,7 @@ as Failure,
 
 class ProfileFailure implements ProfileState {
   const ProfileFailure(this.profile, this.failure);
-
+  
 
  final  CustomerProfile profile;
  final  Failure failure;
