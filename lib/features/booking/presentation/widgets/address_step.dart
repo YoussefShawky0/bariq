@@ -31,9 +31,9 @@ class AddressStep extends StatelessWidget {
                 ),
                 SizedBox(height: AppSpacing.regular),
                 OutlinedButton(
-                  onPressed: () => context
-                      .read<AddressesBloc>()
-                      .add(const AddressesEvent.started()),
+                  onPressed: () => context.read<AddressesBloc>().add(
+                    const AddressesEvent.started(),
+                  ),
                   child: const Text(AppStrings.retry),
                 ),
               ],
@@ -119,9 +119,7 @@ class _AddressList extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(AppSpacing.regular),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.aquaSurface
-                      : AppColors.surface,
+                  color: isSelected ? AppColors.aquaSurface : AppColors.surface,
                   borderRadius: BorderRadius.circular(AppRadius.medium),
                   border: Border.all(
                     color: isSelected ? AppColors.aqua : AppColors.border,
@@ -142,9 +140,7 @@ class _AddressList extends StatelessWidget {
                       ),
                       child: Icon(
                         Icons.location_on,
-                        color: isSelected
-                            ? AppColors.surface
-                            : AppColors.navy,
+                        color: isSelected ? AppColors.surface : AppColors.navy,
                         size: 24.w,
                       ),
                     ),
@@ -190,9 +186,11 @@ class _AddressList extends StatelessWidget {
                             SizedBox(height: AppSpacing.tiny),
                             Text(
                               [
-                                if (addr.building != null) 'مبنى ${addr.building}',
+                                if (addr.building != null)
+                                  'مبنى ${addr.building}',
                                 if (addr.floor != null) 'دور ${addr.floor}',
-                                if (addr.apartment != null) 'شقة ${addr.apartment}',
+                                if (addr.apartment != null)
+                                  'شقة ${addr.apartment}',
                               ].join(' • '),
                               style: AppTextStyles.helper,
                             ),
@@ -201,9 +199,7 @@ class _AddressList extends StatelessWidget {
                       ),
                     ),
                     Icon(
-                      isSelected
-                          ? Icons.check_circle
-                          : Icons.circle_outlined,
+                      isSelected ? Icons.check_circle : Icons.circle_outlined,
                       color: isSelected
                           ? AppColors.aqua
                           : AppColors.dotInactive,

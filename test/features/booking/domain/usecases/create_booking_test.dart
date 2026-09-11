@@ -28,44 +28,52 @@ void main() {
     final result = await useCase(draft);
 
     expect(result.isLeft(), isTrue);
-    result.match(
-      (failure) {
-        expect(failure, isA<ValidationFailure>());
-        expect((failure as ValidationFailure).code, 'BOOKING_DRAFT_INCOMPLETE');
-      },
-      (_) => fail('Expected Left'),
+    result.match((failure) {
+      expect(failure, isA<ValidationFailure>());
+      expect((failure as ValidationFailure).code, 'BOOKING_DRAFT_INCOMPLETE');
+    }, (_) => fail('Expected Left'));
+    verifyNever(
+      () => repository.createBooking(
+        draft: any(named: 'draft'),
+        idempotencyKey: any(named: 'idempotencyKey'),
+      ),
     );
-    verifyNever(() => repository.createBooking(
-          draft: any(named: 'draft'),
-          idempotencyKey: any(named: 'idempotencyKey'),
-        ));
   });
 
-  test('calls repository with draft and generated idempotency key on complete draft', () async {
-    final draft = testBookingDraft();
-    final booking = testBooking();
-    when(() => repository.createBooking(
+  test(
+    'calls repository with draft and generated idempotency key on complete draft',
+    () async {
+      final draft = testBookingDraft();
+      final booking = testBooking();
+      when(
+        () => repository.createBooking(
           draft: any(named: 'draft'),
           idempotencyKey: any(named: 'idempotencyKey'),
-        )).thenAnswer((_) async => Right(booking));
+        ),
+      ).thenAnswer((_) async => Right(booking));
 
-    final result = await useCase(draft);
+      final result = await useCase(draft);
 
-    expect(result.isRight(), isTrue);
-    expect(result.getRight().toNullable(), equals(booking));
-    verify(() => repository.createBooking(
+      expect(result.isRight(), isTrue);
+      expect(result.getRight().toNullable(), equals(booking));
+      verify(
+        () => repository.createBooking(
           draft: draft,
           idempotencyKey: any(named: 'idempotencyKey', that: isNotEmpty),
-        )).called(1);
-  });
+        ),
+      ).called(1);
+    },
+  );
 
   test('propagates repository failure', () async {
     final draft = testBookingDraft();
     const failure = BackendFailure();
-    when(() => repository.createBooking(
-          draft: any(named: 'draft'),
-          idempotencyKey: any(named: 'idempotencyKey'),
-        )).thenAnswer((_) async => const Left(failure));
+    when(
+      () => repository.createBooking(
+        draft: any(named: 'draft'),
+        idempotencyKey: any(named: 'idempotencyKey'),
+      ),
+    ).thenAnswer((_) async => const Left(failure));
 
     final result = await useCase(draft);
 

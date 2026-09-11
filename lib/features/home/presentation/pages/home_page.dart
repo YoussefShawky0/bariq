@@ -146,9 +146,7 @@ class _HomeContent extends StatelessWidget {
               },
             ),
             // Bottom padding.
-            SliverToBoxAdapter(
-              child: SizedBox(height: AppSpacing.spacious),
-            ),
+            SliverToBoxAdapter(child: SizedBox(height: AppSpacing.spacious)),
           ],
         ),
       ),
@@ -174,10 +172,7 @@ class _FeaturedBanner extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 4.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
             decoration: BoxDecoration(
               color: AppColors.aqua,
               borderRadius: BorderRadius.circular(6.r),

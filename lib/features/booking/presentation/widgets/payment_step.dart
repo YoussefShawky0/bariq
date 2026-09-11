@@ -40,9 +40,9 @@ class PaymentStep extends StatelessWidget {
             // Cash option
             InkWell(
               onTap: () {
-                context
-                    .read<BookingBloc>()
-                    .add(const BookingEvent.paymentSelected(PaymentMethod.cash));
+                context.read<BookingBloc>().add(
+                  const BookingEvent.paymentSelected(PaymentMethod.cash),
+                );
               },
               borderRadius: BorderRadius.circular(AppRadius.medium),
               child: Container(

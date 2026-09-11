@@ -7,13 +7,7 @@ Zone testZone({
   String code = 'cairo',
   String nameAr = 'القاهرة',
   String nameEn = 'Cairo',
-}) =>
-    Zone(
-      id: id,
-      code: code,
-      nameAr: nameAr,
-      nameEn: nameEn,
-    );
+}) => Zone(id: id, code: code, nameAr: nameAr, nameEn: nameEn);
 
 Address testAddress({
   String id = 'address-id-1',
@@ -33,21 +27,20 @@ Address testAddress({
     noWaterNeeded: true,
     hasPermission: true,
   ),
-}) =>
-    Address(
-      id: id,
-      customerId: customerId,
-      zoneId: zoneId,
-      zoneName: zoneName,
-      label: label,
-      street: street,
-      isDefault: isDefault,
-      building: building,
-      floor: floor,
-      apartment: apartment,
-      accessNotes: accessNotes,
-      readiness: readiness,
-    );
+}) => Address(
+  id: id,
+  customerId: customerId,
+  zoneId: zoneId,
+  zoneName: zoneName,
+  label: label,
+  street: street,
+  isDefault: isDefault,
+  building: building,
+  floor: floor,
+  apartment: apartment,
+  accessNotes: accessNotes,
+  readiness: readiness,
+);
 
 AddressInput testAddressInput({
   String? id,
@@ -65,16 +58,15 @@ AddressInput testAddressInput({
     noWaterNeeded: true,
     hasPermission: true,
   ),
-}) =>
-    AddressInput(
-      id: id,
-      label: label,
-      zoneId: zoneId,
-      street: street,
-      isDefault: isDefault,
-      building: building,
-      floor: floor,
-      apartment: apartment,
-      accessNotes: accessNotes,
-      readiness: readiness,
-    );
+}) => AddressInput(
+  id: id,
+  label: label,
+  zoneId: zoneId,
+  street: street,
+  isDefault: isDefault,
+  building: building,
+  floor: floor,
+  apartment: apartment,
+  accessNotes: accessNotes,
+  readiness: readiness,
+);

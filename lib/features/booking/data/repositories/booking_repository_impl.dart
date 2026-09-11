@@ -25,9 +25,10 @@ final class BookingRepositoryImpl implements BookingRepository {
     required String zoneId,
     required DateTime date,
   }) => _guard(
-    () async => (await _remoteDataSource.loadAvailableSlots(zoneId, date))
-        .map((model) => model.toEntity())
-        .toList(growable: false),
+    () async => (await _remoteDataSource.loadAvailableSlots(
+      zoneId,
+      date,
+    )).map((model) => model.toEntity()).toList(growable: false),
   );
 
   @override
@@ -35,9 +36,10 @@ final class BookingRepositoryImpl implements BookingRepository {
     required BookingDraft draft,
     required String idempotencyKey,
   }) => _guard(
-    () async =>
-        (await _remoteDataSource.createBooking(draft, idempotencyKey))
-            .toEntity(),
+    () async => (await _remoteDataSource.createBooking(
+      draft,
+      idempotencyKey,
+    )).toEntity(),
   );
 
   ResultFuture<T> _guard<T>(Future<T> Function() action) async {

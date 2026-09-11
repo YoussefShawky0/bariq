@@ -22,8 +22,12 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../helpers/booking_test_data.dart';
 
 class MockVehicleRepository extends Mock implements VehicleRepository {}
+
 class MockAddressRepository extends Mock implements AddressRepository {}
-class MockServiceCatalogRepository extends Mock implements ServiceCatalogRepository {}
+
+class MockServiceCatalogRepository extends Mock
+    implements ServiceCatalogRepository {}
+
 class MockBookingRepository extends Mock implements BookingRepository {}
 
 void main() {
@@ -45,13 +49,21 @@ void main() {
       bookingRepository: bookingRepo,
     );
 
-    when(vehicleRepo.loadVehicles).thenAnswer((_) async => Right([testVehicle()]));
-    when(addressRepo.loadAddresses).thenAnswer((_) async => Right([testAddress()]));
+    when(
+      vehicleRepo.loadVehicles,
+    ).thenAnswer((_) async => Right([testVehicle()]));
+    when(
+      addressRepo.loadAddresses,
+    ).thenAnswer((_) async => Right([testAddress()]));
     when(addressRepo.loadZones).thenAnswer((_) async => const Right([]));
-    when(serviceRepo.loadServices).thenAnswer((_) async => Right([testService()]));
+    when(
+      serviceRepo.loadServices,
+    ).thenAnswer((_) async => Right([testService()]));
   });
 
-  testWidgets('renders step indicator and initial vehicle step title', (tester) async {
+  testWidgets('renders step indicator and initial vehicle step title', (
+    tester,
+  ) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = AppSizes.designSize;
     addTearDown(tester.view.reset);
@@ -65,13 +77,16 @@ void main() {
           home: MultiBlocProvider(
             providers: [
               BlocProvider<BookingBloc>(
-                create: (_) => getIt<BookingBloc>()..add(const BookingEvent.started()),
+                create: (_) =>
+                    getIt<BookingBloc>()..add(const BookingEvent.started()),
               ),
               BlocProvider<VehiclesBloc>(
-                create: (_) => getIt<VehiclesBloc>()..add(const VehiclesEvent.started()),
+                create: (_) =>
+                    getIt<VehiclesBloc>()..add(const VehiclesEvent.started()),
               ),
               BlocProvider<AddressesBloc>(
-                create: (_) => getIt<AddressesBloc>()..add(const AddressesEvent.started()),
+                create: (_) =>
+                    getIt<AddressesBloc>()..add(const AddressesEvent.started()),
               ),
               BlocProvider<ServiceCatalogCubit>(
                 create: (_) => getIt<ServiceCatalogCubit>()..load(),

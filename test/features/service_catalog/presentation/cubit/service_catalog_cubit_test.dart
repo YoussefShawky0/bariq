@@ -27,22 +27,21 @@ void main() {
     blocTest<ServiceCatalogCubit, ServiceCatalogState>(
       'loads services catalog',
       build: () {
-        when(repository.loadServices)
-            .thenAnswer((_) async => Right([testService()]));
+        when(
+          repository.loadServices,
+        ).thenAnswer((_) async => Right([testService()]));
         return buildCubit();
       },
       act: (cubit) => cubit.load(),
-      expect: () => [
-        isA<ServiceCatalogLoading>(),
-        isA<ServiceCatalogReady>(),
-      ],
+      expect: () => [isA<ServiceCatalogLoading>(), isA<ServiceCatalogReady>()],
     );
 
     blocTest<ServiceCatalogCubit, ServiceCatalogState>(
       'emits failure state on repository error',
       build: () {
-        when(repository.loadServices)
-            .thenAnswer((_) async => const Left(NetworkFailure()));
+        when(
+          repository.loadServices,
+        ).thenAnswer((_) async => const Left(NetworkFailure()));
         return buildCubit();
       },
       act: (cubit) => cubit.load(),
@@ -60,15 +59,13 @@ void main() {
     blocTest<ServiceDetailCubit, ServiceDetailState>(
       'loads service details with pricing and addons',
       build: () {
-        when(() => repository.loadServiceDetail('service-1'))
-            .thenAnswer((_) async => Right(testServiceDetail()));
+        when(
+          () => repository.loadServiceDetail('service-1'),
+        ).thenAnswer((_) async => Right(testServiceDetail()));
         return buildDetailCubit();
       },
       act: (cubit) => cubit.load('service-1'),
-      expect: () => [
-        isA<ServiceDetailLoading>(),
-        isA<ServiceDetailReady>(),
-      ],
+      expect: () => [isA<ServiceDetailLoading>(), isA<ServiceDetailReady>()],
     );
   });
 }

@@ -34,13 +34,13 @@ class _ServiceStepState extends State<ServiceStep> {
   void initState() {
     super.initState();
     final draft = context.read<BookingBloc>().state.maybeWhen(
-          drafting: (draft, _) => draft,
-          loadingSlots: (draft) => draft,
-          slotsReady: (draft, _) => draft,
-          submitting: (draft) => draft,
-          failure: (draft, _) => draft,
-          orElse: () => null,
-        );
+      drafting: (draft, _) => draft,
+      loadingSlots: (draft) => draft,
+      slotsReady: (draft, _) => draft,
+      submitting: (draft) => draft,
+      failure: (draft, _) => draft,
+      orElse: () => null,
+    );
     if (draft?.service != null) {
       _selectedService = draft!.service;
       _selectedAddons.addAll(draft.addons);
@@ -84,12 +84,12 @@ class _ServiceStepState extends State<ServiceStep> {
   void _onContinue(ServicePricing pricing) {
     if (_selectedService == null) return;
     context.read<BookingBloc>().add(
-          BookingEvent.serviceSelected(
-            _selectedService!,
-            List.unmodifiable(_selectedAddons),
-            pricing,
-          ),
-        );
+      BookingEvent.serviceSelected(
+        _selectedService!,
+        List.unmodifiable(_selectedAddons),
+        pricing,
+      ),
+    );
   }
 
   @override
@@ -117,8 +117,9 @@ class _ServiceStepState extends State<ServiceStep> {
                   children: [
                     Text(
                       failure.message,
-                      style: AppTextStyles.body
-                          .copyWith(color: AppColors.error),
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.error,
+                      ),
                     ),
                     SizedBox(height: AppSpacing.regular),
                     OutlinedButton(
@@ -129,7 +130,8 @@ class _ServiceStepState extends State<ServiceStep> {
                   ],
                 ),
               ),
-              ready: (services) => _buildContent(services, vehicleClass?.name, draft),
+              ready: (services) =>
+                  _buildContent(services, vehicleClass?.name, draft),
             );
           },
         );
@@ -165,10 +167,7 @@ class _ServiceStepState extends State<ServiceStep> {
               vertical: AppSpacing.regular,
             ),
             children: [
-              Text(
-                AppStrings.servicesTitle,
-                style: AppTextStyles.sectionTitle,
-              ),
+              Text(AppStrings.servicesTitle, style: AppTextStyles.sectionTitle),
               SizedBox(height: AppSpacing.compact),
               ...services.map((service) {
                 final isSelected = _selectedService?.id == service.id;
@@ -185,9 +184,7 @@ class _ServiceStepState extends State<ServiceStep> {
                             : AppColors.surface,
                         borderRadius: BorderRadius.circular(AppRadius.medium),
                         border: Border.all(
-                          color: isSelected
-                              ? AppColors.aqua
-                              : AppColors.border,
+                          color: isSelected ? AppColors.aqua : AppColors.border,
                           width: isSelected ? 2 : 1,
                         ),
                       ),
@@ -248,8 +245,9 @@ class _ServiceStepState extends State<ServiceStep> {
                 ),
                 SizedBox(height: AppSpacing.compact),
                 ..._selectedDetail!.addons.map((addon) {
-                  final isAddonSelected =
-                      _selectedAddons.any((a) => a.id == addon.id);
+                  final isAddonSelected = _selectedAddons.any(
+                    (a) => a.id == addon.id,
+                  );
                   return CheckboxListTile(
                     value: isAddonSelected,
                     activeColor: AppColors.aqua,

@@ -13,9 +13,8 @@ enum PaymentMethod {
   };
 
   /// Parses a backend value safely, defaulting to [cash].
-  static PaymentMethod fromApi(String value) =>
-      PaymentMethod.values.firstWhere(
-        (m) => m.apiValue == value,
-        orElse: () => PaymentMethod.cash,
-      );
+  static PaymentMethod fromApi(String value) => PaymentMethod.values.firstWhere(
+    (m) => m.apiValue == value,
+    orElse: () => PaymentMethod.cash,
+  );
 }

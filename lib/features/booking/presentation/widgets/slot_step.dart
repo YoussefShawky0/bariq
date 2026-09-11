@@ -25,7 +25,9 @@ class _SlotStepState extends State<SlotStep> {
     final now = DateTime.now();
     _selectedDate = DateTime(now.year, now.month, now.day);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<BookingBloc>().add(BookingEvent.slotsRequested(_selectedDate));
+      context.read<BookingBloc>().add(
+        BookingEvent.slotsRequested(_selectedDate),
+      );
     });
   }
 
@@ -47,22 +49,22 @@ class _SlotStepState extends State<SlotStep> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.pageHorizontal),
-          child: Text(
-            AppStrings.selectDate,
-            style: AppTextStyles.sectionTitle,
-          ),
+          child: Text(AppStrings.selectDate, style: AppTextStyles.sectionTitle),
         ),
         SizedBox(height: AppSpacing.compact),
         SizedBox(
           height: 72.h,
           child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: AppSpacing.pageHorizontal),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.pageHorizontal,
+            ),
             scrollDirection: Axis.horizontal,
             itemCount: dates.length,
             separatorBuilder: (_, _) => SizedBox(width: AppSpacing.compact),
             itemBuilder: (context, index) {
               final date = dates[index];
-              final isSelected = date.year == _selectedDate.year &&
+              final isSelected =
+                  date.year == _selectedDate.year &&
                   date.month == _selectedDate.month &&
                   date.day == _selectedDate.day;
 
@@ -79,7 +81,7 @@ class _SlotStepState extends State<SlotStep> {
                   'الخميس',
                   'الجمعة',
                   'السبت',
-                  'الأحد'
+                  'الأحد',
                 ];
                 dayLabel = dayNames[date.weekday - 1];
               }
@@ -139,22 +141,19 @@ class _SlotStepState extends State<SlotStep> {
               return state.maybeWhen(
                 loadingSlots: (_) =>
                     const Center(child: CircularProgressIndicator()),
-                slotsReady: (draft, slots) => _SlotsGrid(
-                  slots: slots,
-                  selectedSlot: draft.slot,
-                ),
-                drafting: (draft, _) => _SlotsGrid(
-                  slots: const [],
-                  selectedSlot: draft.slot,
-                ),
+                slotsReady: (draft, slots) =>
+                    _SlotsGrid(slots: slots, selectedSlot: draft.slot),
+                drafting: (draft, _) =>
+                    _SlotsGrid(slots: const [], selectedSlot: draft.slot),
                 failure: (_, failure) => Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         failure.message,
-                        style: AppTextStyles.body
-                            .copyWith(color: AppColors.error),
+                        style: AppTextStyles.body.copyWith(
+                          color: AppColors.error,
+                        ),
                       ),
                       SizedBox(height: AppSpacing.regular),
                       OutlinedButton(
@@ -164,8 +163,7 @@ class _SlotStepState extends State<SlotStep> {
                     ],
                   ),
                 ),
-                orElse: () =>
-                    const Center(child: CircularProgressIndicator()),
+                orElse: () => const Center(child: CircularProgressIndicator()),
               );
             },
           ),
@@ -176,10 +174,7 @@ class _SlotStepState extends State<SlotStep> {
 }
 
 class _SlotsGrid extends StatelessWidget {
-  const _SlotsGrid({
-    required this.slots,
-    this.selectedSlot,
-  });
+  const _SlotsGrid({required this.slots, this.selectedSlot});
 
   final List<TimeSlot> slots;
   final TimeSlot? selectedSlot;
@@ -201,9 +196,7 @@ class _SlotsGrid extends StatelessWidget {
               SizedBox(height: AppSpacing.regular),
               Text(
                 AppStrings.noSlotsAvailable,
-                style: AppTextStyles.body.copyWith(
-                  color: AppColors.textMuted,
-                ),
+                style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
               ),
             ],
           ),
@@ -225,15 +218,15 @@ class _SlotsGrid extends StatelessWidget {
       itemCount: slots.length,
       itemBuilder: (context, index) {
         final slot = slots[index];
-        final isSelected = selectedSlot?.start == slot.start &&
-            selectedSlot?.end == slot.end;
+        final isSelected =
+            selectedSlot?.start == slot.start && selectedSlot?.end == slot.end;
         final isAvailable = slot.available;
 
         return InkWell(
           onTap: isAvailable
-              ? () => context
-                  .read<BookingBloc>()
-                  .add(BookingEvent.slotSelected(slot))
+              ? () => context.read<BookingBloc>().add(
+                  BookingEvent.slotSelected(slot),
+                )
               : null,
           borderRadius: BorderRadius.circular(AppRadius.medium),
           child: Container(
@@ -265,10 +258,10 @@ class _SlotsGrid extends StatelessWidget {
                   style: AppTextStyles.body.copyWith(
                     color: isSelected
                         ? AppColors.surface
-                        : (isAvailable
-                            ? AppColors.navy
-                            : AppColors.textMuted),
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        : (isAvailable ? AppColors.navy : AppColors.textMuted),
+                    fontWeight: isSelected
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                   ),
                 ),
               ],

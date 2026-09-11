@@ -41,8 +41,10 @@ final class BookingDraft {
   /// Total estimated duration in minutes.
   int get totalDurationMinutes {
     final base = pricing?.durationMinutes ?? 0;
-    final addonsDuration =
-        addons.fold<int>(0, (sum, a) => sum + a.durationMinutes);
+    final addonsDuration = addons.fold<int>(
+      0,
+      (sum, a) => sum + a.durationMinutes,
+    );
     return base + addonsDuration;
   }
 
@@ -92,14 +94,14 @@ final class BookingDraft {
 
   @override
   int get hashCode => Object.hash(
-        vehicle?.id,
-        service?.id,
-        pricing?.serviceId,
-        address?.id,
-        slot,
-        paymentMethod,
-        Object.hashAll(addons.map((a) => a.id)),
-      );
+    vehicle?.id,
+    service?.id,
+    pricing?.serviceId,
+    address?.id,
+    slot,
+    paymentMethod,
+    Object.hashAll(addons.map((a) => a.id)),
+  );
 
   static bool _addonsEquals(List<ServiceAddon> a, List<ServiceAddon> b) {
     if (identical(a, b)) return true;

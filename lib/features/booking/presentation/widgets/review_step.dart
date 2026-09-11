@@ -64,9 +64,9 @@ class ReviewStep extends StatelessWidget {
                       title: AppStrings.vehicle,
                       content:
                           '${draft.vehicle!.make} ${draft.vehicle!.model} (${draft.vehicle!.plateNumber})',
-                      onEdit: () => context
-                          .read<BookingBloc>()
-                          .add(const BookingEvent.stepChanged(BookingStep.vehicle)),
+                      onEdit: () => context.read<BookingBloc>().add(
+                        const BookingEvent.stepChanged(BookingStep.vehicle),
+                      ),
                     ),
 
                   // Service row
@@ -76,9 +76,9 @@ class ReviewStep extends StatelessWidget {
                       title: AppStrings.service,
                       content:
                           '${draft.service!.nameAr} • ${draft.pricing?.priceDisplay ?? ''}',
-                      onEdit: () => context
-                          .read<BookingBloc>()
-                          .add(const BookingEvent.stepChanged(BookingStep.service)),
+                      onEdit: () => context.read<BookingBloc>().add(
+                        const BookingEvent.stepChanged(BookingStep.service),
+                      ),
                     ),
 
                   // Addons row
@@ -89,9 +89,9 @@ class ReviewStep extends StatelessWidget {
                       content: draft.addons
                           .map((a) => '${a.nameAr} (${a.priceDisplay})')
                           .join('\n'),
-                      onEdit: () => context
-                          .read<BookingBloc>()
-                          .add(const BookingEvent.stepChanged(BookingStep.service)),
+                      onEdit: () => context.read<BookingBloc>().add(
+                        const BookingEvent.stepChanged(BookingStep.service),
+                      ),
                     ),
 
                   // Address row
@@ -101,9 +101,9 @@ class ReviewStep extends StatelessWidget {
                       title: AppStrings.address,
                       content:
                           '${draft.address!.label} • ${draft.address!.zoneName}\n${draft.address!.street}',
-                      onEdit: () => context
-                          .read<BookingBloc>()
-                          .add(const BookingEvent.stepChanged(BookingStep.address)),
+                      onEdit: () => context.read<BookingBloc>().add(
+                        const BookingEvent.stepChanged(BookingStep.address),
+                      ),
                     ),
 
                   // Slot row
@@ -113,9 +113,9 @@ class ReviewStep extends StatelessWidget {
                       title: AppStrings.time,
                       content:
                           '${draft.slot!.start.day}/${draft.slot!.start.month}/${draft.slot!.start.year} • ${draft.slot!.displayRange}',
-                      onEdit: () => context
-                          .read<BookingBloc>()
-                          .add(const BookingEvent.stepChanged(BookingStep.slot)),
+                      onEdit: () => context.read<BookingBloc>().add(
+                        const BookingEvent.stepChanged(BookingStep.slot),
+                      ),
                     ),
 
                   // Payment method row
@@ -123,9 +123,9 @@ class ReviewStep extends StatelessWidget {
                     icon: Icons.payments,
                     title: AppStrings.payment,
                     content: AppStrings.cashOnDelivery,
-                    onEdit: () => context
-                        .read<BookingBloc>()
-                        .add(const BookingEvent.stepChanged(BookingStep.payment)),
+                    onEdit: () => context.read<BookingBloc>().add(
+                      const BookingEvent.stepChanged(BookingStep.payment),
+                    ),
                   ),
 
                   SizedBox(height: AppSpacing.compact),
@@ -180,9 +180,9 @@ class ReviewStep extends StatelessWidget {
                   ),
                   onPressed: isSubmitting || !draft.isComplete
                       ? null
-                      : () => context
-                          .read<BookingBloc>()
-                          .add(const BookingEvent.submitted()),
+                      : () => context.read<BookingBloc>().add(
+                          const BookingEvent.submitted(),
+                        ),
                   child: isSubmitting
                       ? SizedBox(
                           height: 20.h,
@@ -192,7 +192,10 @@ class ReviewStep extends StatelessWidget {
                             color: AppColors.surface,
                           ),
                         )
-                      : Text(AppStrings.confirmBooking, style: AppTextStyles.button),
+                      : Text(
+                          AppStrings.confirmBooking,
+                          style: AppTextStyles.button,
+                        ),
                 ),
               ),
             ),
@@ -243,15 +246,16 @@ class _SummaryCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 2.h),
-                  Text(
-                    content,
-                    style: AppTextStyles.body,
-                  ),
+                  Text(content, style: AppTextStyles.body),
                 ],
               ),
             ),
             IconButton(
-              icon: Icon(Icons.edit_outlined, size: 18.w, color: AppColors.textMuted),
+              icon: Icon(
+                Icons.edit_outlined,
+                size: 18.w,
+                color: AppColors.textMuted,
+              ),
               onPressed: onEdit,
               visualDensity: VisualDensity.compact,
             ),

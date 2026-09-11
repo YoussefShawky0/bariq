@@ -11,7 +11,9 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/booking_test_data.dart';
 
-class MockBookingRemoteDataSource extends Mock implements BookingRemoteDataSource {}
+class MockBookingRemoteDataSource extends Mock
+    implements BookingRemoteDataSource {}
+
 class MockAppLogger extends Mock implements AppLogger {}
 
 void main() {
@@ -36,10 +38,14 @@ void main() {
       end: DateTime.utc(2026, 9, 8, 12, 0),
       available: true,
     );
-    when(() => remoteDataSource.loadAvailableSlots('zone-1', date))
-        .thenAnswer((_) async => [model]);
+    when(
+      () => remoteDataSource.loadAvailableSlots('zone-1', date),
+    ).thenAnswer((_) async => [model]);
 
-    final result = await repository.loadAvailableSlots(zoneId: 'zone-1', date: date);
+    final result = await repository.loadAvailableSlots(
+      zoneId: 'zone-1',
+      date: date,
+    );
 
     expect(result.isRight(), isTrue);
     final slots = result.getRight().toNullable()!;
@@ -61,8 +67,9 @@ void main() {
       items: const [],
       createdAt: DateTime.utc(2026, 9, 8, 9, 0),
     );
-    when(() => remoteDataSource.createBooking(draft, 'key-123'))
-        .thenAnswer((_) async => model);
+    when(
+      () => remoteDataSource.createBooking(draft, 'key-123'),
+    ).thenAnswer((_) async => model);
 
     final result = await repository.createBooking(
       draft: draft,
@@ -75,20 +82,24 @@ void main() {
     expect(booking.status, BookingStatus.confirmed);
   });
 
-  test('maps BackendConfigurationException to BackendConfigurationFailure', () async {
-    final draft = testBookingDraft();
-    when(() => remoteDataSource.createBooking(draft, any()))
-        .thenThrow(const BackendConfigurationException());
+  test(
+    'maps BackendConfigurationException to BackendConfigurationFailure',
+    () async {
+      final draft = testBookingDraft();
+      when(
+        () => remoteDataSource.createBooking(draft, any()),
+      ).thenThrow(const BackendConfigurationException());
 
-    final result = await repository.createBooking(
-      draft: draft,
-      idempotencyKey: 'key-123',
-    );
+      final result = await repository.createBooking(
+        draft: draft,
+        idempotencyKey: 'key-123',
+      );
 
-    expect(result.isLeft(), isTrue);
-    result.match(
-      (failure) => expect(failure, isA<BackendConfigurationFailure>()),
-      (_) => fail('Expected failure'),
-    );
-  });
+      expect(result.isLeft(), isTrue);
+      result.match(
+        (failure) => expect(failure, isA<BackendConfigurationFailure>()),
+        (_) => fail('Expected failure'),
+      );
+    },
+  );
 }

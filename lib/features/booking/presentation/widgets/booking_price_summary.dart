@@ -34,17 +34,10 @@ class BookingPriceSummary extends StatelessWidget {
             ),
           // Add-ons.
           ...draft.addons.map(
-            (addon) => _PriceRow(
-              label: addon.nameAr,
-              amount: addon.priceMinor,
-            ),
+            (addon) => _PriceRow(label: addon.nameAr, amount: addon.priceMinor),
           ),
           Divider(height: AppSpacing.section, color: AppColors.border),
-          _PriceRow(
-            label: 'الإجمالي',
-            amount: draft.totalMinor,
-            isBold: true,
-          ),
+          _PriceRow(label: 'الإجمالي', amount: draft.totalMinor, isBold: true),
         ],
       ),
     );
@@ -64,9 +57,7 @@ class _PriceRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = isBold
-        ? AppTextStyles.sectionTitle
-        : AppTextStyles.body;
+    final style = isBold ? AppTextStyles.sectionTitle : AppTextStyles.body;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.h),
       child: Row(

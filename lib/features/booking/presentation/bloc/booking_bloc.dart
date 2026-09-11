@@ -53,10 +53,12 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   ) {
     final draft = _currentDraft;
     if (draft == null) return;
-    emit(BookingState.drafting(
-      draft.copyWith(vehicle: event.vehicle),
-      BookingStep.service,
-    ));
+    emit(
+      BookingState.drafting(
+        draft.copyWith(vehicle: event.vehicle),
+        BookingStep.service,
+      ),
+    );
   }
 
   void _onServiceSelected(
@@ -65,14 +67,16 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   ) {
     final draft = _currentDraft;
     if (draft == null) return;
-    emit(BookingState.drafting(
-      draft.copyWith(
-        service: event.service,
-        addons: event.addons,
-        pricing: event.pricing,
+    emit(
+      BookingState.drafting(
+        draft.copyWith(
+          service: event.service,
+          addons: event.addons,
+          pricing: event.pricing,
+        ),
+        BookingStep.address,
       ),
-      BookingStep.address,
-    ));
+    );
   }
 
   void _onAddressSelected(
@@ -81,10 +85,12 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   ) {
     final draft = _currentDraft;
     if (draft == null) return;
-    emit(BookingState.drafting(
-      draft.copyWith(address: event.address),
-      BookingStep.slot,
-    ));
+    emit(
+      BookingState.drafting(
+        draft.copyWith(address: event.address),
+        BookingStep.slot,
+      ),
+    );
   }
 
   Future<void> _onSlotsRequested(
@@ -107,16 +113,15 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     );
   }
 
-  void _onSlotSelected(
-    BookingSlotSelected event,
-    Emitter<BookingState> emit,
-  ) {
+  void _onSlotSelected(BookingSlotSelected event, Emitter<BookingState> emit) {
     final draft = _currentDraft;
     if (draft == null) return;
-    emit(BookingState.drafting(
-      draft.copyWith(slot: event.slot),
-      BookingStep.payment,
-    ));
+    emit(
+      BookingState.drafting(
+        draft.copyWith(slot: event.slot),
+        BookingStep.payment,
+      ),
+    );
   }
 
   void _onPaymentSelected(
@@ -125,16 +130,15 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   ) {
     final draft = _currentDraft;
     if (draft == null) return;
-    emit(BookingState.drafting(
-      draft.copyWith(paymentMethod: event.method),
-      BookingStep.review,
-    ));
+    emit(
+      BookingState.drafting(
+        draft.copyWith(paymentMethod: event.method),
+        BookingStep.review,
+      ),
+    );
   }
 
-  void _onStepChanged(
-    BookingStepChanged event,
-    Emitter<BookingState> emit,
-  ) {
+  void _onStepChanged(BookingStepChanged event, Emitter<BookingState> emit) {
     final draft = _currentDraft;
     if (draft == null) return;
     emit(BookingState.drafting(draft, event.step));
@@ -185,8 +189,7 @@ sealed class BookingEvent with _$BookingEvent {
   const factory BookingEvent.slotsRequested(DateTime date) =
       BookingSlotsRequested;
 
-  const factory BookingEvent.slotSelected(TimeSlot slot) =
-      BookingSlotSelected;
+  const factory BookingEvent.slotSelected(TimeSlot slot) = BookingSlotSelected;
 
   const factory BookingEvent.paymentSelected(PaymentMethod method) =
       BookingPaymentSelected;
@@ -211,8 +214,7 @@ sealed class BookingState with _$BookingState {
     List<TimeSlot> slots,
   ) = BookingSlotsReady;
 
-  const factory BookingState.submitting(BookingDraft draft) =
-      BookingSubmitting;
+  const factory BookingState.submitting(BookingDraft draft) = BookingSubmitting;
 
   const factory BookingState.success(Booking booking) = BookingSuccess;
 

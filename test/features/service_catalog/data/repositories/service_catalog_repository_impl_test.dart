@@ -36,8 +36,9 @@ void main() {
   }
 
   test('loads services from remote data source', () async {
-    when(remoteDataSource.fetchServices)
-        .thenAnswer((_) async => [testService()]);
+    when(
+      remoteDataSource.fetchServices,
+    ).thenAnswer((_) async => [testService()]);
 
     final result = await repository.loadServices();
 
@@ -47,12 +48,15 @@ void main() {
   });
 
   test('loads complete service detail with addons and pricing', () async {
-    when(remoteDataSource.fetchServices)
-        .thenAnswer((_) async => [testService()]);
-    when(() => remoteDataSource.fetchAddons('service-1'))
-        .thenAnswer((_) async => [testServiceAddon()]);
-    when(() => remoteDataSource.fetchPricingConfigs('service-1'))
-        .thenAnswer((_) async => [testServicePricing()]);
+    when(
+      remoteDataSource.fetchServices,
+    ).thenAnswer((_) async => [testService()]);
+    when(
+      () => remoteDataSource.fetchAddons('service-1'),
+    ).thenAnswer((_) async => [testServiceAddon()]);
+    when(
+      () => remoteDataSource.fetchPricingConfigs('service-1'),
+    ).thenAnswer((_) async => [testServicePricing()]);
 
     final result = await repository.loadServiceDetail('service-1');
 
@@ -64,8 +68,7 @@ void main() {
   });
 
   test('maps timeout to a network failure', () async {
-    when(remoteDataSource.fetchServices)
-        .thenThrow(TimeoutException('timeout'));
+    when(remoteDataSource.fetchServices).thenThrow(TimeoutException('timeout'));
     stubLogger();
 
     final result = await repository.loadServices();

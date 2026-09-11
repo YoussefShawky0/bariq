@@ -26,9 +26,7 @@ class BookingWizardPage extends StatelessWidget {
         return state.maybeWhen(
           success: (booking) => Scaffold(
             backgroundColor: AppColors.background,
-            body: SafeArea(
-              child: BookingSuccessView(booking: booking),
-            ),
+            body: SafeArea(child: BookingSuccessView(booking: booking)),
           ),
           orElse: () {
             final currentStep = state.maybeWhen(
@@ -45,9 +43,9 @@ class BookingWizardPage extends StatelessWidget {
                   icon: const Icon(Icons.arrow_back, color: AppColors.navy),
                   onPressed: () {
                     if (currentStep > BookingStep.vehicle) {
-                      context
-                          .read<BookingBloc>()
-                          .add(BookingEvent.stepChanged(currentStep - 1));
+                      context.read<BookingBloc>().add(
+                        BookingEvent.stepChanged(currentStep - 1),
+                      );
                     } else {
                       context.pop();
                     }
@@ -64,9 +62,7 @@ class BookingWizardPage extends StatelessWidget {
                   children: [
                     StepIndicator(currentStep: currentStep),
                     SizedBox(height: AppSpacing.compact),
-                    Expanded(
-                      child: _buildCurrentStep(currentStep),
-                    ),
+                    Expanded(child: _buildCurrentStep(currentStep)),
                   ],
                 ),
               ),

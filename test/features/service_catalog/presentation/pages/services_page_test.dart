@@ -20,9 +20,7 @@ void main() {
 
   setUp(() async {
     repository = MockServiceCatalogRepository();
-    await configureDependencies(
-      serviceCatalogRepository: repository,
-    );
+    await configureDependencies(serviceCatalogRepository: repository);
   });
 
   testWidgets('renders all services in catalog', (tester) async {

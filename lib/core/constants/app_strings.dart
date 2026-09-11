@@ -247,7 +247,8 @@ abstract final class AppStrings {
   static const String tomorrow = 'غداً';
   static const String noSlotsAvailable = 'لا توجد مواعيد متاحة في هذا اليوم';
   static const String cashOnDelivery = 'كاش عند الاستلام';
-  static const String cashDescription = 'الدفع نقداً للفني بعد إتمام الغسيل والتأكد من الجودة';
+  static const String cashDescription =
+      'الدفع نقداً للفني بعد إتمام الغسيل والتأكد من الجودة';
   static const String cardPaymentSoon = 'بطاقة بنكية / محفظة إلكترونية';
   static const String cardPaymentUnavailable = 'قريباً';
   static const String bookingSummary = 'ملخص الحجز';
@@ -260,7 +261,8 @@ abstract final class AppStrings {
   static const String payment = 'طريقة الدفع';
   static const String totalPrice = 'الإجمالي';
   static const String bookingSubmitting = 'جاري تأكيد الحجز...';
-  static const String bookingFailed = 'تعذر تأكيد الحجز. يرجى المحاولة مرة أخرى.';
+  static const String bookingFailed =
+      'تعذر تأكيد الحجز. يرجى المحاولة مرة أخرى.';
   static const String technicianOnTheWay = 'الفني في الطريق';
   static const String trackBooking = 'متابعة الحجز';
   static const String savedChoices = 'اختياراتك المحفوظة';

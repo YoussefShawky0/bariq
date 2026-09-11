@@ -25,10 +25,8 @@ void main() {
     repository = MockBookingRepository();
   });
 
-  BookingBloc buildBloc() => BookingBloc(
-        LoadAvailableSlots(repository),
-        CreateBooking(repository),
-      );
+  BookingBloc buildBloc() =>
+      BookingBloc(LoadAvailableSlots(repository), CreateBooking(repository));
 
   blocTest<BookingBloc, BookingState>(
     'emits drafting initial step on started',
@@ -42,7 +40,8 @@ void main() {
   blocTest<BookingBloc, BookingState>(
     'advances to service step when vehicle is selected',
     build: buildBloc,
-    seed: () => const BookingState.drafting(BookingDraft(), BookingStep.vehicle),
+    seed: () =>
+        const BookingState.drafting(BookingDraft(), BookingStep.vehicle),
     act: (bloc) => bloc.add(BookingEvent.vehicleSelected(testVehicle())),
     expect: () => [
       BookingState.drafting(
@@ -59,11 +58,9 @@ void main() {
       const BookingDraft().copyWith(vehicle: testVehicle()),
       BookingStep.service,
     ),
-    act: (bloc) => bloc.add(BookingEvent.serviceSelected(
-      testService(),
-      [testAddon()],
-      testPricing(),
-    )),
+    act: (bloc) => bloc.add(
+      BookingEvent.serviceSelected(testService(), [testAddon()], testPricing()),
+    ),
     expect: () => [
       BookingState.drafting(
         const BookingDraft().copyWith(
@@ -105,17 +102,20 @@ void main() {
   blocTest<BookingBloc, BookingState>(
     'loads slots for zone on slotsRequested',
     build: () {
-      when(() => repository.loadAvailableSlots(
-            zoneId: any(named: 'zoneId'),
-            date: any(named: 'date'),
-          )).thenAnswer((_) async => Right([testTimeSlot()]));
+      when(
+        () => repository.loadAvailableSlots(
+          zoneId: any(named: 'zoneId'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => Right([testTimeSlot()]));
       return buildBloc();
     },
     seed: () => BookingState.drafting(
       const BookingDraft().copyWith(address: testAddress()),
       BookingStep.slot,
     ),
-    act: (bloc) => bloc.add(BookingEvent.slotsRequested(DateTime.utc(2026, 9, 8))),
+    act: (bloc) =>
+        bloc.add(BookingEvent.slotsRequested(DateTime.utc(2026, 9, 8))),
     expect: () => [
       BookingState.loadingSlots(
         const BookingDraft().copyWith(address: testAddress()),
@@ -130,10 +130,12 @@ void main() {
   blocTest<BookingBloc, BookingState>(
     'submits complete draft and emits success on repository success',
     build: () {
-      when(() => repository.createBooking(
-            draft: any(named: 'draft'),
-            idempotencyKey: any(named: 'idempotencyKey'),
-          )).thenAnswer((_) async => Right(testBooking()));
+      when(
+        () => repository.createBooking(
+          draft: any(named: 'draft'),
+          idempotencyKey: any(named: 'idempotencyKey'),
+        ),
+      ).thenAnswer((_) async => Right(testBooking()));
       return buildBloc();
     },
     seed: () => BookingState.drafting(testBookingDraft(), BookingStep.review),
@@ -147,10 +149,12 @@ void main() {
   blocTest<BookingBloc, BookingState>(
     'emits failure on submission failure',
     build: () {
-      when(() => repository.createBooking(
-            draft: any(named: 'draft'),
-            idempotencyKey: any(named: 'idempotencyKey'),
-          )).thenAnswer((_) async => const Left(BackendFailure()));
+      when(
+        () => repository.createBooking(
+          draft: any(named: 'draft'),
+          idempotencyKey: any(named: 'idempotencyKey'),
+        ),
+      ).thenAnswer((_) async => const Left(BackendFailure()));
       return buildBloc();
     },
     seed: () => BookingState.drafting(testBookingDraft(), BookingStep.review),

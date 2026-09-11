@@ -52,9 +52,8 @@ enum BookingStatus {
   };
 
   /// Parses a backend value safely, defaulting to [draft].
-  static BookingStatus fromApi(String value) =>
-      BookingStatus.values.firstWhere(
-        (s) => s.apiValue == value,
-        orElse: () => BookingStatus.draft,
-      );
+  static BookingStatus fromApi(String value) => BookingStatus.values.firstWhere(
+    (s) => s.apiValue == value,
+    orElse: () => BookingStatus.draft,
+  );
 }

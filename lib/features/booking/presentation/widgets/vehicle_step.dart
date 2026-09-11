@@ -31,9 +31,9 @@ class VehicleStep extends StatelessWidget {
                 ),
                 SizedBox(height: AppSpacing.regular),
                 OutlinedButton(
-                  onPressed: () => context
-                      .read<VehiclesBloc>()
-                      .add(const VehiclesEvent.started()),
+                  onPressed: () => context.read<VehiclesBloc>().add(
+                    const VehiclesEvent.started(),
+                  ),
                   child: const Text(AppStrings.retry),
                 ),
               ],
@@ -111,17 +111,15 @@ class _VehicleList extends StatelessWidget {
 
             return InkWell(
               onTap: () {
-                context
-                    .read<BookingBloc>()
-                    .add(BookingEvent.vehicleSelected(vehicle));
+                context.read<BookingBloc>().add(
+                  BookingEvent.vehicleSelected(vehicle),
+                );
               },
               borderRadius: BorderRadius.circular(AppRadius.medium),
               child: Container(
                 padding: EdgeInsets.all(AppSpacing.regular),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.aquaSurface
-                      : AppColors.surface,
+                  color: isSelected ? AppColors.aquaSurface : AppColors.surface,
                   borderRadius: BorderRadius.circular(AppRadius.medium),
                   border: Border.all(
                     color: isSelected ? AppColors.aqua : AppColors.border,
@@ -141,9 +139,7 @@ class _VehicleList extends StatelessWidget {
                       ),
                       child: Icon(
                         Icons.directions_car,
-                        color: isSelected
-                            ? AppColors.surface
-                            : AppColors.navy,
+                        color: isSelected ? AppColors.surface : AppColors.navy,
                         size: 24.w,
                       ),
                     ),

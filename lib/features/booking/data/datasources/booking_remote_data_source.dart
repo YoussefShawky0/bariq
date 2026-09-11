@@ -7,16 +7,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 /// Remote data source contract for booking operations.
 abstract interface class BookingRemoteDataSource {
   /// Fetches available slots for a zone on a given date.
-  Future<List<TimeSlotModel>> loadAvailableSlots(
-    String zoneId,
-    DateTime date,
-  );
+  Future<List<TimeSlotModel>> loadAvailableSlots(String zoneId, DateTime date);
 
   /// Creates a booking from a validated draft.
-  Future<BookingModel> createBooking(
-    BookingDraft draft,
-    String idempotencyKey,
-  );
+  Future<BookingModel> createBooking(BookingDraft draft, String idempotencyKey);
 }
 
 /// Supabase implementation of [BookingRemoteDataSource].
@@ -78,12 +72,14 @@ final class SupabaseBookingRemoteDataSource implements BookingRemoteDataSource {
         'price_minor': draft.pricing!.priceMinor,
         'duration_minutes': draft.pricing!.durationMinutes,
       },
-      ...draft.addons.map((addon) => {
-        'item_type': BookingItemType.addon.apiValue,
-        'name_snapshot': addon.nameAr,
-        'price_minor': addon.priceMinor,
-        'duration_minutes': addon.durationMinutes,
-      }),
+      ...draft.addons.map(
+        (addon) => {
+          'item_type': BookingItemType.addon.apiValue,
+          'name_snapshot': addon.nameAr,
+          'price_minor': addon.priceMinor,
+          'duration_minutes': addon.durationMinutes,
+        },
+      ),
     ];
 
     final dynamic response = await _client.rpc<dynamic>(

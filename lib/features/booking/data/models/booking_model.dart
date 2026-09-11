@@ -25,13 +25,13 @@ final class BookingModel {
     slotEnd: DateTime.parse(json['slot_end'] as String),
     totalMinor: json['total_minor'] as int,
     currency: json['currency'] as String? ?? 'EGP',
-    paymentMethod:
-        PaymentMethod.fromApi(json['payment_method'] as String? ?? 'cash'),
-    items: (json['items'] as List<dynamic>?)
+    paymentMethod: PaymentMethod.fromApi(
+      json['payment_method'] as String? ?? 'cash',
+    ),
+    items:
+        (json['items'] as List<dynamic>?)
             ?.map(
-              (item) => BookingItemModel.fromJson(
-                item as Map<String, dynamic>,
-              ),
+              (item) => BookingItemModel.fromJson(item as Map<String, dynamic>),
             )
             .toList(growable: false) ??
         const [],
@@ -113,9 +113,5 @@ final class TimeSlotModel {
   final DateTime end;
   final bool available;
 
-  TimeSlot toEntity() => TimeSlot(
-    start: start,
-    end: end,
-    available: available,
-  );
+  TimeSlot toEntity() => TimeSlot(start: start, end: end, available: available);
 }

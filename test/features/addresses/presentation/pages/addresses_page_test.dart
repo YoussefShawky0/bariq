@@ -27,8 +27,7 @@ void main() {
 
   setUp(() {
     repository = MockAddressRepository();
-    when(repository.loadZones)
-        .thenAnswer((_) async => Right([testZone()]));
+    when(repository.loadZones).thenAnswer((_) async => Right([testZone()]));
     bloc = AddressesBloc(
       LoadAddresses(repository),
       SaveAddress(repository),
@@ -40,8 +39,7 @@ void main() {
   tearDown(() => bloc.close());
 
   testWidgets('shows empty state when no addresses exist', (tester) async {
-    when(repository.loadAddresses)
-        .thenAnswer((_) async => const Right([]));
+    when(repository.loadAddresses).thenAnswer((_) async => const Right([]));
 
     await _pumpPage(tester, bloc);
 
@@ -50,8 +48,9 @@ void main() {
   });
 
   testWidgets('renders saved address card with default badge', (tester) async {
-    when(repository.loadAddresses)
-        .thenAnswer((_) async => Right([testAddress()]));
+    when(
+      repository.loadAddresses,
+    ).thenAnswer((_) async => Right([testAddress()]));
 
     await _pumpPage(tester, bloc);
 
@@ -59,9 +58,12 @@ void main() {
     expect(find.text(AppStrings.defaultAddress), findsOneWidget);
   });
 
-  testWidgets('shows delete confirmation dialog on delete press', (tester) async {
-    when(repository.loadAddresses)
-        .thenAnswer((_) async => Right([testAddress()]));
+  testWidgets('shows delete confirmation dialog on delete press', (
+    tester,
+  ) async {
+    when(
+      repository.loadAddresses,
+    ).thenAnswer((_) async => Right([testAddress()]));
 
     await _pumpPage(tester, bloc);
 

@@ -70,8 +70,9 @@ class AddressesBloc extends Bloc<AddressesEvent, AddressesState> {
     emit(AddressesState.saving(addresses));
     final result = await _saveAddress(event.input);
     await result.match(
-      (failure) async =>
-          emit(AddressesState.failure(addresses, failure, AddressMutation.save)),
+      (failure) async => emit(
+        AddressesState.failure(addresses, failure, AddressMutation.save),
+      ),
       (_) => _reloadAfterMutation(emit, addresses, AddressMutation.save),
     );
   }
@@ -106,20 +107,19 @@ class AddressesBloc extends Bloc<AddressesEvent, AddressesState> {
   }
 
   List<Address>? get _currentAddresses => state.maybeWhen(
-        ready: (addresses) => addresses,
-        saving: (addresses) => addresses,
-        deleting: (addresses, _) => addresses,
-        success: (addresses, _) => addresses,
-        failure: (addresses, _, _) => addresses,
-        orElse: () => null,
-      );
+    ready: (addresses) => addresses,
+    saving: (addresses) => addresses,
+    deleting: (addresses, _) => addresses,
+    success: (addresses, _) => addresses,
+    failure: (addresses, _, _) => addresses,
+    orElse: () => null,
+  );
 }
 
 @freezed
 sealed class AddressesEvent with _$AddressesEvent {
   const factory AddressesEvent.started() = AddressesStarted;
-  const factory AddressesEvent.submitted(AddressInput input) =
-      AddressSubmitted;
+  const factory AddressesEvent.submitted(AddressInput input) = AddressSubmitted;
   const factory AddressesEvent.deleteConfirmed(String id) =
       AddressDeleteConfirmed;
 }
