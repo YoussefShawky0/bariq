@@ -6,12 +6,15 @@ import 'package:bariq/features/app_startup/domain/entities/app_destination.dart'
 import 'package:bariq/features/app_startup/presentation/cubit/app_startup_cubit.dart';
 import 'package:bariq/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bariq/features/auth/presentation/pages/auth_page.dart';
+import 'package:bariq/features/booking/presentation/bloc/booking_bloc.dart';
+import 'package:bariq/features/booking/presentation/pages/booking_wizard_page.dart';
 import 'package:bariq/features/home/presentation/pages/home_page.dart';
 import 'package:bariq/features/home/presentation/pages/main_shell.dart';
 import 'package:bariq/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:bariq/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:bariq/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:bariq/features/profile/presentation/pages/profile_completion_page.dart';
+import 'package:bariq/features/service_catalog/presentation/cubit/service_catalog_cubit.dart';
 import 'package:bariq/features/service_catalog/presentation/pages/service_detail_page.dart';
 import 'package:bariq/features/service_catalog/presentation/pages/services_page.dart';
 import 'package:bariq/features/vehicles/domain/entities/vehicle.dart';
@@ -34,6 +37,7 @@ abstract final class AppRoutes {
   static const String addresses = '/addresses';
   static const String addressAdd = '/addresses/add';
   static const String services = '/services';
+  static const String booking = '/booking';
 
   static String vehicleEdit(String id) => '/vehicles/$id/edit';
   static String serviceDetail(String id) => '/services/$id';
@@ -127,6 +131,29 @@ GoRouter createAppRouter(AppStartupCubit startupCubit) {
         path: '/services/:id',
         builder: (_, state) =>
             ServiceDetailPage(serviceId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: AppRoutes.booking,
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider<BookingBloc>(
+              create: (_) =>
+                  getIt<BookingBloc>()..add(const BookingEvent.started()),
+            ),
+            BlocProvider<VehiclesBloc>(
+              create: (_) =>
+                  getIt<VehiclesBloc>()..add(const VehiclesEvent.started()),
+            ),
+            BlocProvider<AddressesBloc>(
+              create: (_) =>
+                  getIt<AddressesBloc>()..add(const AddressesEvent.started()),
+            ),
+            BlocProvider<ServiceCatalogCubit>(
+              create: (_) => getIt<ServiceCatalogCubit>()..load(),
+            ),
+          ],
+          child: const BookingWizardPage(),
+        ),
       ),
     ],
   );
