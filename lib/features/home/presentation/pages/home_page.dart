@@ -39,6 +39,37 @@ class _HomeContent extends StatelessWidget {
           slivers: [
             // Featured banner.
             SliverToBoxAdapter(child: _FeaturedBanner()),
+            // Book new wash action button.
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.pageHorizontal,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 54.h,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.aqua,
+                      foregroundColor: AppColors.navy,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.large),
+                      ),
+                      elevation: 0,
+                    ),
+                    onPressed: () => context.push(AppRoutes.booking),
+                    child: Text(
+                      AppStrings.bookNewWash,
+                      style: AppTextStyles.title.copyWith(
+                        color: AppColors.navy,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             // Services section header.
             SliverToBoxAdapter(
               child: Padding(

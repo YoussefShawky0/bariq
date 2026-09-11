@@ -24,6 +24,12 @@ import 'package:bariq/features/auth/domain/usecases/sign_up_with_email.dart';
 import 'package:bariq/features/auth/domain/usecases/update_password.dart';
 import 'package:bariq/features/auth/domain/usecases/watch_auth_session.dart';
 import 'package:bariq/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:bariq/features/booking/data/datasources/booking_remote_data_source.dart';
+import 'package:bariq/features/booking/data/repositories/booking_repository_impl.dart';
+import 'package:bariq/features/booking/domain/repositories/booking_repository.dart';
+import 'package:bariq/features/booking/domain/usecases/create_booking.dart';
+import 'package:bariq/features/booking/domain/usecases/load_available_slots.dart';
+import 'package:bariq/features/booking/presentation/bloc/booking_bloc.dart';
 import 'package:bariq/features/onboarding/data/datasources/onboarding_local_data_source.dart';
 import 'package:bariq/features/onboarding/data/repositories/onboarding_repository_impl.dart';
 import 'package:bariq/features/onboarding/domain/repositories/onboarding_repository.dart';
@@ -63,6 +69,7 @@ Future<void> configureDependencies({
   VehicleRepository? vehicleRepository,
   AddressRepository? addressRepository,
   ServiceCatalogRepository? serviceCatalogRepository,
+  BookingRepository? bookingRepository,
   SupabaseClient? supabaseClient,
 }) async {
   if (getIt.isRegistered<AppStartupCubit>()) {
@@ -170,5 +177,16 @@ Future<void> configureDependencies({
     ..registerLazySingleton<LoadServices>(() => LoadServices(getIt()))
     ..registerLazySingleton<LoadServiceDetail>(() => LoadServiceDetail(getIt()))
     ..registerFactory<ServiceCatalogCubit>(() => ServiceCatalogCubit(getIt()))
-    ..registerFactory<ServiceDetailCubit>(() => ServiceDetailCubit(getIt()));
+    ..registerFactory<ServiceDetailCubit>(() => ServiceDetailCubit(getIt()))
+    ..registerLazySingleton<BookingRemoteDataSource>(
+      () => SupabaseBookingRemoteDataSource(supabaseClient),
+    )
+    ..registerLazySingleton<BookingRepository>(
+      () => bookingRepository ?? BookingRepositoryImpl(getIt(), getIt()),
+    )
+    ..registerLazySingleton<LoadAvailableSlots>(
+      () => LoadAvailableSlots(getIt()),
+    )
+    ..registerLazySingleton<CreateBooking>(() => CreateBooking(getIt()))
+    ..registerFactory<BookingBloc>(() => BookingBloc(getIt(), getIt()));
 }

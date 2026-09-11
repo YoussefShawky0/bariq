@@ -225,6 +225,49 @@ abstract final class AppStrings {
   static String priceEGP(int price) => '$price ج.م';
   static String durationMinutes(int minutes) => '$minutes دقيقة';
 
+  // ── Booking Wizard ──
+  static const String bookingTitle = 'حجز غسيل';
+  static const String selectVehicleStep = 'اختر العربية';
+  static const String selectServiceStep = 'اختر الخدمة';
+  static const String selectAddressStep = 'اختر المكان';
+  static const String selectSlotStep = 'اختر الموعد';
+  static const String selectPaymentStep = 'طريقة الدفع';
+  static const String reviewBookingStep = 'مراجعة الحجز';
+  static const String back = 'السابق';
+  static const String confirmBooking = 'تأكيد الحجز';
+  static const String bookingConfirmed = 'تم تأكيد الحجز بنجاح!';
+  static const String bookingCode = 'كود الحجز';
+  static const String goToHome = 'العودة للرئيسية';
+  static const String noVehiclesForBooking = 'لا توجد سيارات مسجلة';
+  static const String addNewVehicle = 'إضافة سيارة جديدة';
+  static const String noAddressesForBooking = 'لا توجد عناوين مسجلة';
+  static const String addNewAddress = 'إضافة عنوان جديد';
+  static const String selectDate = 'اختر اليوم';
+  static const String today = 'اليوم';
+  static const String tomorrow = 'غداً';
+  static const String noSlotsAvailable = 'لا توجد مواعيد متاحة في هذا اليوم';
+  static const String cashOnDelivery = 'كاش عند الاستلام';
+  static const String cashDescription =
+      'الدفع نقداً للفني بعد إتمام الغسيل والتأكد من الجودة';
+  static const String cardPaymentSoon = 'بطاقة بنكية / محفظة إلكترونية';
+  static const String cardPaymentUnavailable = 'قريباً';
+  static const String bookingSummary = 'ملخص الحجز';
+  static const String vehicle = 'السيارة';
+  static const String service = 'الخدمة';
+  static const String addons = 'الإضافات';
+  static const String noAddons = 'بدون إضافات';
+  static const String address = 'المكان';
+  static const String time = 'الموعد';
+  static const String payment = 'طريقة الدفع';
+  static const String totalPrice = 'الإجمالي';
+  static const String bookingSubmitting = 'جاري تأكيد الحجز...';
+  static const String bookingFailed =
+      'تعذر تأكيد الحجز. يرجى المحاولة مرة أخرى.';
+  static const String technicianOnTheWay = 'الفني في الطريق';
+  static const String trackBooking = 'متابعة الحجز';
+  static const String savedChoices = 'اختياراتك المحفوظة';
+  static const String bookNewWash = 'احجز غسيل جديد';
+
   static const Locale arabicLocale = Locale('ar');
   static const List<Locale> supportedLocales = [arabicLocale];
 }
